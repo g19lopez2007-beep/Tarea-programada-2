@@ -1,7 +1,9 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 14/5/26
+#Ultima fecha de modificacion: 16/5/26
 #Version de python:3.14
+
+from funciones import *
 
 def submenuReportes():
     '''
@@ -38,7 +40,7 @@ def submenuReportes():
         else:
             print("Opción inválida")
 
-def menuPrincipal():
+def menuPrincipal(pDonadores):
     '''
     Funcionamiento:
     -Entrada:
@@ -50,7 +52,12 @@ def menuPrincipal():
         print("\n===== BANCO DE SANGRE =====\n1.Insertar donador\n2.Generar donadores\n3.Actualizar datos del donador\n4.Eliminar donador\n5.Insertar lugar de donación según provincia\n6.Reportes\n7.Salir")
         opcion=input("Digite una opción: ")
         if opcion=="1":
-            print("Aqui tiene que estar la funcion insertarDonador")
+            cedula=input("Digite la cédula (#-####-####): ")
+            fecha=input("Digite la fecha de nacimiento (DD/MM/AAAA): ")
+            correo=input("Digite el correo: ")
+            telefono=input("Digite el teléfono (####-####): ")
+            peso=input("Digite el peso: ")
+            print(insertarDonador(pDonadores,cedula,fecha,correo,telefono,peso))
         elif opcion=="2":
             print("Aqui tiene que estar la funcion generarDonadores")
         elif opcion=="3":
@@ -66,4 +73,5 @@ def menuPrincipal():
             break
         else:
             print("Opción inválida")
-menuPrincipal()
+donadores=cargarDonadores()
+menuPrincipal(donadores)
