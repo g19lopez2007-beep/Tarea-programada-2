@@ -11,7 +11,6 @@ def submenuReportes():
     -Entrada:
     El usuario selecciona una opción del submenú de reportes
     -Salida:
-    Se muestra el espacio donde luego irá la función correspondiente
     '''
     while True:
         print("\n===== REPORTES =====\n1.Donantes por provincia\n2.Por rango de edad\n3.Por tipo de sangre de una provincia dada\n4.Lista completa de donadores\n5.Mujeres donantes O-\n6.¿A quién puede donar?\n7.¿De quién puede recibir?\n8.Donantes NO activos\n9.Lugares de donación\n10.Regresar")
@@ -48,6 +47,10 @@ def menuPrincipal(pDonadores):
     -Salida:
     Se muestra el espacio donde luego irá la función correspondiente
     '''
+    tiposSangre=("O+","O-","A+","A-","B+","B-","AB+","AB-")
+    nombres=("Carlos","María","José","Ana","Luis","Sofía","Pedro","Valeria","Andrés","Camila")
+    apellidos=("López","Mora","Castro","Vargas","Soto","Jiménez","Rojas","Ramírez","Arias","Solís")
+    correos=("gmail.com","costarricense.cr","racsa.go.cr","ccss.sa.cr")
     while True:
         print("\n===== BANCO DE SANGRE =====\n1.Insertar donador\n2.Generar donadores\n3.Actualizar datos del donador\n4.Eliminar donador\n5.Insertar lugar de donación según provincia\n6.Reportes\n7.Salir")
         opcion=input("Digite una opción: ")
@@ -59,7 +62,7 @@ def menuPrincipal(pDonadores):
             peso=input("Digite el peso: ")
             print(insertarDonador(pDonadores,cedula,fecha,correo,telefono,peso))
         elif opcion=="2":
-            print("Aqui tiene que estar la funcion generarDonadores")
+            pDonadores=generarDonadores(pDonadores,tiposSangre,nombres,apellidos,correos)
         elif opcion=="3":
             print("Aqui tiene que estar la funcion actualizarDonador")
         elif opcion=="4":

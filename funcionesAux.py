@@ -5,20 +5,8 @@
 
 import re
 import pickle
+import time
 
-#Funcion 1 del menu principal:
-def guardarDonadores(pDonadores):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores
-    -Salida:
-        Se guarda la matriz de donadores en memoria secundaria
-    '''
-    archivo=open("donadores.dat","wb")
-    pickle.dump(pDonadores,archivo)
-    archivo.close()
-    
 def validarCedula(pCedula):
     '''
     Funcionamiento:
@@ -102,4 +90,69 @@ def validarPeso(pPeso):
         return "El peso debe ser mayor a 50"
     if peso>=120:
         return "El peso debe ser menor a 120"
+    return True
+
+#Funcion Aux 1 del menu principal:
+def guardarDonadores(pDonadores):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores
+    -Salida:
+        Se guarda la matriz de donadores en memoria secundaria
+    '''
+    archivo=open("donadores.dat","wb")
+    pickle.dump(pDonadores,archivo)
+    archivo.close()
+
+#Funcion Aux 2 del menu principal:
+def validarCantidadAux(pCantidad):
+    '''
+    Funcionamiento:
+    -Entrada:
+    Se recibe la cantidad ingresada por el usuario
+    -Salida:
+    Se devuelve True si la cantidad es válida o un mensaje de error
+    '''
+    try:
+        pCantidad=int(pCantidad)
+    except:
+        return "La cantidad debe ser numérica"
+    if pCantidad<=0:
+        return "La cantidad debe ser mayor a 0"
+    return True
+
+#Funcion Aux 2 del menu principal:
+def validarAñoAux(pAño):
+    '''
+    Funcionamiento:
+    -Entrada:
+    Se recibe el año mínimo ingresado por el usuario
+    -Salida:
+    Se devuelve True si el año es válido o un mensaje de error
+    '''
+    añoActual=time.localtime().tm_year
+    try:
+        pAño=int(pAño)
+    except:
+        return "El año debe ser numérico"
+    if pAño>añoActual:
+        return "El año no puede ser mayor al actual"
+    return True
+
+#Funcion Aux 2 del menu principal:
+def confirmarAñoAux(pAño):
+    '''
+    Funcionamiento:
+    -Entrada:
+    Se recibe el año mínimo ingresado por el usuario
+    -Salida:
+    Se devuelve True si el año permite generar personas entre 18 y 70 años o un mensaje de error
+    '''
+    añoActual=time.localtime().tm_year
+    edadMaxima=añoActual-int(pAño)
+    if edadMaxima<18:
+        return "No se puede usar ese año porque generaría personas menores de 18 años"
+    if edadMaxima>70:
+        return "No se puede usar ese año porque generaría personas mayores de 70 años"
     return True
