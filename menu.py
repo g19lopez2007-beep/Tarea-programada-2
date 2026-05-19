@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 16/5/26
+#Ultima fecha de modificacion: 18/5/26
 #Version de python:3.14
 
 from funciones import *
@@ -9,7 +9,7 @@ def submenuReportes():
     '''
     Funcionamiento:
     -Entrada:
-    El usuario selecciona una opción del submenú de reportes
+        El usuario selecciona una opción del submenú de reportes
     -Salida:
     '''
     while True:
@@ -43,14 +43,15 @@ def menuPrincipal(pDonadores):
     '''
     Funcionamiento:
     -Entrada:
-    El usuario selecciona una opción del menú principal
+        El usuario selecciona una opción del menú principal
     -Salida:
-    Se muestra el espacio donde luego irá la función correspondiente
+        Se muestra el espacio donde luego irá la función correspondiente
     '''
     tiposSangre=("O+","O-","A+","A-","B+","B-","AB+","AB-")
     nombres=("Carlos","María","José","Ana","Luis","Sofía","Pedro","Valeria","Andrés","Camila")
     apellidos=("López","Mora","Castro","Vargas","Soto","Jiménez","Rojas","Ramírez","Arias","Solís")
     correos=("gmail.com","costarricense.cr","racsa.go.cr","ccss.sa.cr")
+    lugaresDonacion={}
     while True:
         print("\n===== BANCO DE SANGRE =====\n1.Insertar donador\n2.Generar donadores\n3.Actualizar datos del donador\n4.Eliminar donador\n5.Insertar lugar de donación según provincia\n6.Reportes\n7.Salir")
         opcion=input("Digite una opción: ")
@@ -68,7 +69,7 @@ def menuPrincipal(pDonadores):
         elif opcion=="4":
             print("Aqui tiene que estar la funcion eliminarDonador")
         elif opcion=="5":
-            print("Aqui tiene que estar la funcion insertarLugarDonacion")
+            lugaresDonacion=insertarLugarDonacion(lugaresDonacion)
         elif opcion=="6":
             submenuReportes()
         elif opcion=="7":

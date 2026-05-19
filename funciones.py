@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 16/5/26
+#Ultima fecha de modificacion: 18/5/26
 #Version de python:3.14
 
 import pickle
@@ -28,9 +28,9 @@ def generarCedula():
     '''
     Funcionamiento:
     -Entrada:
-    No recibe datos
+        No recibe datos
     -Salida:
-    Se devuelve una cédula generada con el formato #-####-####
+        Se devuelve una cédula generada con el formato #-####-####
     '''
     provincia=random.randint(1,8)
     tomo=random.randint(1000,9999)
@@ -41,9 +41,9 @@ def generarNombre(pNombres,pApellidos):
     '''
     Funcionamiento:
     -Entrada:
-    Se reciben nombres y apellidos
+        Se reciben nombres y apellidos
     -Salida:
-    Se devuelve una lista con nombre, primer apellido y segundo apellido
+        Se devuelve una lista con nombre, primer apellido y segundo apellido
     '''
     return [random.choice(pNombres),random.choice(pApellidos),random.choice(pApellidos)]
 
@@ -51,9 +51,9 @@ def generarFechaNacimiento(pAnnoMinimo):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe el año mínimo permitido
+        Se recibe el año mínimo permitido
     -Salida:
-    Se devuelve una fecha de nacimiento aleatoria desde ese año hasta el año actual
+        Se devuelve una fecha de nacimiento aleatoria desde ese año hasta el año actual
     '''
     annoActual=time.localtime().tm_year
     dia=random.randint(1,28)
@@ -65,9 +65,9 @@ def generarTelefono():
     '''
     Funcionamiento:
     -Entrada:
-    No recibe datos
+        No recibe datos
     -Salida:
-    Se devuelve un teléfono generado con el formato ####-####
+        Se devuelve un teléfono generado con el formato ####-####
     '''
     primerDigito=random.choice(("2","4","6","7","8","9"))
     resto=str(random.randint(100,999))
@@ -78,15 +78,22 @@ def generarCorreo(pNombre,pApellido,pCorreos):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe el nombre, apellido y correos permitidos
+        Se recibe el nombre, apellido y correos permitidos
     -Salida:
-    Se devuelve un correo generado automáticamente
+        Se devuelve un correo generado automáticamente
     '''
     numero=random.randint(10,99)
     return pNombre.lower()+pApellido.lower()+str(numero)+"@"+random.choice(pCorreos)
 
 #Funcion 1 del menu principal:
 def insertarDonador(pDonadores,pCedula,pFecha,pCorreo,pTelefono,pPeso):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se reciben los datos del donador y la matriz principal
+    -Salida:
+        Se registra el donador si todos los datos son válidos o se devuelve el error encontrado
+    '''
     cedula=validarCedula(pCedula)
     fecha=validarFecha(pFecha)
     correo=validarCorreo(pCorreo)
@@ -112,9 +119,9 @@ def generarDonadores(pBaseDatos,pTiposSangre,pNombres,pApellidos,pCorreos):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe la matriz principal y las estructuras necesarias para generar donadores
+        Se recibe la matriz principal y las estructuras necesarias para generar donadores
     -Salida:
-    Se agregan donadores generados automáticamente a la matriz principal
+        Se agregan donadores generados automáticamente a la matriz principal
     '''
     cantidad=input("Digite la cantidad de donadores que desea generar: ")
     validarCantidad=validarCantidadAux(cantidad)
@@ -154,4 +161,35 @@ def generarDonadores(pBaseDatos,pTiposSangre,pNombres,pApellidos,pCorreos):
     print("Se generaron correctamente",cantidad,"donadores")
     print("Donadores activos:",contadorActivos)
     print("Donadores no activos:",contadorInactivos)
-    return pBaseDatos
+    return 
+
+#Funcion 5 del menu principal:
+def insertarLugarDonacion(pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el diccionario de lugares de donación
+    -Salida:
+        Se agrega un nuevo lugar de donación según la provincia indicada
+    '''
+    print("\nSeleccione una opción\n1.San José\n2.Alajuela\n3.Cartago\n4.Heredia\n5.Guanacaste\n6.Puntarenas\n7.Limón")
+    provincia=input("Digite el número de provincia: ")
+    validarProvincia=validarProvinciaAux(provincia)
+    if validarProvincia!=True:
+        print(validarProvincia)
+        return pLugaresDonacion
+    lugar=input("Digite el nuevo lugar de donación: ").strip()
+    validarLugar=validarLugarDonacionAux(lugar)
+    if validarLugar!=True:
+        print(validarLugar)
+        return pLugaresDonacion
+    validarRepetido=validarLugarRepetidoAux(provincia,lugar,pLugaresDonacion)
+    if validarRepetido!=True:
+        print(validarRepetido)
+        return pLugaresDonacion
+    provincia=int(provincia)
+    if provincia not in pLugaresDonacion:
+        pLugaresDonacion[provincia]=[]
+    pLugaresDonacion[provincia].append(lugar)
+    print("Lugar agregado correctamente")
+    return pLugaresDonacion

@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 16/5/26
+#Ultima fecha de modificacion: 18/5/26
 #Version de python:3.14
 
 import re
@@ -79,9 +79,9 @@ def validarPeso(pPeso):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe el peso del donador
+        Se recibe el peso del donador
     -Salida:
-    Se devuelve True si el peso es válido o un mensaje indicando el error encontrado
+        Se devuelve True si el peso es válido o un mensaje indicando el error encontrado
     '''
     if not re.match("^[0-9]{2,3}$",pPeso):
         return "El peso minimo debe ser de 2 digitos y maximo de 3 digitos"
@@ -110,9 +110,9 @@ def validarCantidadAux(pCantidad):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe la cantidad ingresada por el usuario
+        Se recibe la cantidad ingresada por el usuario
     -Salida:
-    Se devuelve True si la cantidad es válida o un mensaje de error
+        Se devuelve True si la cantidad es válida o un mensaje de error
     '''
     try:
         pCantidad=int(pCantidad)
@@ -127,9 +127,9 @@ def validarAñoAux(pAño):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe el año mínimo ingresado por el usuario
+        Se recibe el año mínimo ingresado por el usuario
     -Salida:
-    Se devuelve True si el año es válido o un mensaje de error
+        Se devuelve True si el año es válido o un mensaje de error
     '''
     añoActual=time.localtime().tm_year
     try:
@@ -145,9 +145,9 @@ def confirmarAñoAux(pAño):
     '''
     Funcionamiento:
     -Entrada:
-    Se recibe el año mínimo ingresado por el usuario
+        Se recibe el año mínimo ingresado por el usuario
     -Salida:
-    Se devuelve True si el año permite generar personas entre 18 y 70 años o un mensaje de error
+        Se devuelve True si el año permite generar personas entre 18 y 70 años o un mensaje de error
     '''
     añoActual=time.localtime().tm_year
     edadMaxima=añoActual-int(pAño)
@@ -155,4 +155,51 @@ def confirmarAñoAux(pAño):
         return "No se puede usar ese año porque generaría personas menores de 18 años"
     if edadMaxima>70:
         return "No se puede usar ese año porque generaría personas mayores de 70 años"
+    return 
+
+#Funcion Aux 5 del menu principal:
+def validarProvinciaAux(pProvincia):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la provincia ingresada por el usuario
+    -Salida:
+        Se devuelve True si la provincia es válida o un mensaje de error
+    '''
+    try:
+        pProvincia=int(pProvincia)
+    except:
+        return "La provincia debe ser numérica"
+    if pProvincia<1 or pProvincia>7:
+        return "Provincia inválida"
+    return True
+
+#Funcion Aux 5 del menu principal:
+def validarLugarDonacionAux(pLugar):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el lugar de donación ingresado por el usuario
+    -Salida:
+        Se devuelve True si el lugar es válido o un mensaje de error
+    '''
+    if pLugar.strip()=="":
+        return "El lugar no puede estar vacío"
+    return True
+
+#Funcion Aux 5 del menu principal:
+def validarLugarRepetidoAux(pProvincia,pLugar,pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la provincia, el lugar ingresado y el diccionario de lugares
+    -Salida:
+        Se devuelve True si el lugar no está repetido o un mensaje de error
+    '''
+    pProvincia=int(pProvincia)
+    if pProvincia not in pLugaresDonacion:
+        return True
+    for lugarActual in pLugaresDonacion[pProvincia]:
+        if pLugar.lower()==lugarActual.lower():
+            return "Ese lugar ya está registrado en esa provincia"
     return True
