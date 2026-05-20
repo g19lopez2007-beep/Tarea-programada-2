@@ -188,8 +188,31 @@ def actualizarDonador(pDonadores):
     print("Donador actualizado satisfactoriamente")
     return pDonadores
 
-
-
+#Funcion 4 del menu principal:
+def eliminarDonador(pDonadores):
+    '''
+    Funcionamiento:
+        Busca un donador y cambia su estado
+        a inactivo sin eliminarlo físicamente
+    -Entrada:
+        Se recibe la matriz principal de donadores
+    -Salida:
+        Se actualiza el estado o muestra mensaje
+    '''
+    cedula=input("Digite la cédula del donador: ")
+    posicion=buscarDonadorCedulaAux(cedula,pDonadores)
+    if posicion==-1:
+        print("La persona con el número de cédula:",cedula,"no está registrada.")
+        return pDonadores
+    justificacion=input("Digite la justificación: ")
+    respuesta=input("¿Desea confirmar la eliminación? " "(si/no): ")
+    confirmar=confirmarEliminacionAux(respuesta)
+    if confirmar==True:
+        inactivarDonadorAux(posicion,pDonadores,justificacion)
+        print("Donador eliminado satisfactoriamente")
+    else:
+        print("Donador NO eliminado")
+    return pDonadores
 
 
 
