@@ -198,6 +198,24 @@ def guardarCambiosDonadorAux(pDonadores):
     '''
     guardarDonadores(pDonadores)
 
+#Funcion Aux 4 del menu principal:
+def confirmarEliminacionAux(pRespuesta):
+    '''
+    Funcionamiento:
+        Valida si el usuario confirmó la eliminación
+    -Entrada:
+        Se recibe la respuesta del usuario
+    -Salida:
+        Se devuelve True o False
+    '''
+    pRespuesta=pRespuesta.lower().strip()
+    if pRespuesta=="si":
+        return True
+    if pRespuesta=="sí":
+        return True
+    return False
+
+
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
     '''
