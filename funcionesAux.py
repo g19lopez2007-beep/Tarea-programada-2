@@ -172,7 +172,19 @@ def buscarDonadorCedulaAux(pCedula,pDonadores):
             return i
     return -1
 
-
+#Funcion Aux 3 del menu principal:
+def actualizarDatosDonadorAux(pPosicion,pDonadores,pCorreo,pTelefono,pPeso):
+    '''
+    Funcionamiento:
+        Actualiza los datos editables del donador
+    -Entrada:
+        Se recibe la posición, matriz, correo, teléfono y peso
+    -Salida:
+        Se actualiza la información del donador
+    '''
+    pDonadores[pPosicion][5]=pPeso
+    pDonadores[pPosicion][6]=pCorreo
+    pDonadores[pPosicion][7]=pTelefono
 
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
