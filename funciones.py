@@ -163,6 +163,36 @@ def generarDonadores(pBaseDatos,pTiposSangre,pNombres,pApellidos,pCorreos):
     print("Donadores no activos:",contadorInactivos)
     return pBaseDatos
 
+#Funcion 3 del menu principal:
+
+def actualizarDonador(pDonadores):
+    '''
+    Funcionamiento:
+        Busca un donador por cédula y permite actualizar
+        sus datos editables
+    -Entrada:
+        Se recibe la matriz principal de donadores
+    -Salida:
+        Se actualiza la información o se muestra mensaje
+    '''
+    cedula=input("Digite la cédula del donador: ")
+    posicion=buscarDonadorCedulaAux(cedula,pDonadores)
+    if posicion==-1:
+        print("La persona con el número de cédula:",cedula,"no está registrada.")
+        return pDonadores
+    correo=input("Digite el nuevo correo: ")
+    telefono=input("Digite el nuevo teléfono: ")
+    peso=float(input("Digite el nuevo peso: "))
+    actualizarDatosDonadorAux(posicion,pDonadores,correo,telefono,peso)
+    guardarCambiosDonadorAux(pDonadores)
+    print("Donador actualizado satisfactoriamente")
+    return pDonadores
+
+
+
+
+
+
 #Funcion 5 del menu principal:
 def insertarLugarDonacion(pLugaresDonacion):
     '''
