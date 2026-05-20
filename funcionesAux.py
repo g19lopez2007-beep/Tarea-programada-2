@@ -157,6 +157,23 @@ def confirmarAñoAux(pAño):
         return "No se puede usar ese año porque generaría personas mayores de 70 años"
     return 
 
+#Funcion Aux 3 del menu principal:
+def buscarDonadorCedulaAux(pCedula,pDonadores):
+    '''
+    Funcionamiento:
+        Busca un donador en la matriz usando la cédula
+    -Entrada:
+        Se recibe la cédula y la matriz de donadores
+    -Salida:
+        Se devuelve la posición del donador o -1 si no existe
+    '''
+    for i in range(len(pDonadores)):
+        if pDonadores[i][1]==pCedula:
+            return i
+    return -1
+
+
+
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
     '''
