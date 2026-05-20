@@ -155,7 +155,7 @@ def confirmarAñoAux(pAño):
         return "No se puede usar ese año porque generaría personas menores de 18 años"
     if edadMaxima>70:
         return "No se puede usar ese año porque generaría personas mayores de 70 años"
-    return 
+    return True
 
 #Funcion Aux 3 del menu principal:
 def buscarDonadorCedulaAux(pCedula,pDonadores):
@@ -220,3 +220,63 @@ def validarLugarRepetidoAux(pProvincia,pLugar,pLugaresDonacion):
         if pLugar.lower()==lugarActual.lower():
             return "Ese lugar ya está registrado en esa provincia"
     return True
+
+#Funcion Aux 3 del submenu:
+def obtenerNombreCompleto(pNombre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la lista del nombre del donador
+    -Salida:
+        Se devuelve el nombre completo en un string
+    '''
+    return pNombre[0]+" "+pNombre[1]+" "+pNombre[2]
+
+def validarTipoSangreAux(pTipoSangre,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre ingresado y la tupla de tipos de sangre
+    -Salida:
+        Se devuelve True si el tipo de sangre es válido o un mensaje de error
+    '''
+    try:
+        pTipoSangre=int(pTipoSangre)
+    except:
+        return "El tipo de sangre debe ser un número"
+    if pTipoSangre<1 or pTipoSangre>len(pTiposSangre):
+        return "Tipo de sangre inválido"
+    return True
+
+def obtenerFechaTexto(pFecha):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la fecha del donador
+    -Salida:
+        Se devuelve la fecha en formato texto
+    '''
+    return str(pFecha[0])+"/"+str(pFecha[1])+"/"+str(pFecha[2])
+
+def iniciarHTML(pArchivo,pTitulo):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el archivo y el título del reporte
+    -Salida:
+        Se escribe el encabezado inicial del HTML
+    '''
+    fechaHora=time.strftime("%d/%m/%Y %H:%M:%S")
+    pArchivo.write("<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<title>"+pTitulo+"</title>\n</head>\n<body>\n")
+    pArchivo.write("<h1>"+pTitulo+"</h1>\n")
+    pArchivo.write("<p>Fecha y hora del sistema: "+fechaHora+"</p>\n")
+
+def finalizarHTML(pArchivo):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el archivo HTML
+    -Salida:
+        Se cierra el HTML
+    '''
+    pArchivo.write("</body>\n</html>")
