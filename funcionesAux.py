@@ -215,7 +215,21 @@ def confirmarEliminacionAux(pRespuesta):
         return True
     return False
 
-
+#Funcion Aux 4 del menu principal:
+def inactivarDonadorAux(pPosicion,pDonadores,pJustificacion):
+    '''
+    Funcionamiento:
+        Cambia el estado del donador a inactivo
+        y guarda la justificación
+    -Entrada:
+        Se recibe posición, matriz y justificación
+    -Salida:
+        Se actualiza la matriz
+    '''
+    pDonadores[pPosicion][8]=0
+    pDonadores[pPosicion][9]=pJustificacion
+    guardarDonadores(pDonadores)
+    
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
     '''
