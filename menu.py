@@ -5,7 +5,7 @@
 
 from funciones import *
 
-def submenuReportes():
+def submenuReportes(pDonadores,pTiposSangre):
     '''
     Funcionamiento:
     -Entrada:
@@ -20,7 +20,7 @@ def submenuReportes():
         elif opcion=="2":
             print("Aqui tiene que estar la funcion reporteRangoEdad")
         elif opcion=="3":
-            print("Aqui tiene que estar la funcion reporteTipoSangreProvincia")
+            reporteTipoSangreProvincia(pDonadores,pTiposSangre)
         elif opcion=="4":
             print("Aqui tiene que estar la funcion reporteListaCompletaDonadores")
         elif opcion=="5":
@@ -71,7 +71,7 @@ def menuPrincipal(pDonadores):
         elif opcion=="5":
             lugaresDonacion=insertarLugarDonacion(lugaresDonacion)
         elif opcion=="6":
-            submenuReportes()
+            submenuReportes(pDonadores,tiposSangre)
         elif opcion=="7":
             print("Donar sangre, es donar vida")
             break
