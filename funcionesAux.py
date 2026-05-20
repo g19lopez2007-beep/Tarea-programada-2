@@ -186,6 +186,18 @@ def actualizarDatosDonadorAux(pPosicion,pDonadores,pCorreo,pTelefono,pPeso):
     pDonadores[pPosicion][6]=pCorreo
     pDonadores[pPosicion][7]=pTelefono
 
+#Funcion Aux 3 del menu principal:
+def guardarCambiosDonadorAux(pDonadores):
+    '''
+    Funcionamiento:
+        Guarda los cambios realizados en memoria secundaria
+    -Entrada:
+        Se recibe la matriz actualizada
+    -Salida:
+        Se guardan los cambios
+    '''
+    guardarDonadores(pDonadores)
+
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
     '''
