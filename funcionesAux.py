@@ -6,8 +6,10 @@
 import re
 import pickle
 import time
+import names
+import random
 
-def validarCedula(pCedula):
+def validarCedulaAux(pCedula):
     '''
     Funcionamiento:
     -Entrada:
@@ -19,7 +21,7 @@ def validarCedula(pCedula):
         return "El formato de cédula esta malo"
     return True
 
-def validarFecha(pFecha):
+def validarFechaAux(pFecha):
     '''
     Funcionamiento:
     -Entrada:
@@ -51,7 +53,7 @@ def validarFecha(pFecha):
             return True
     return "Fecha invalida"
 
-def validarCorreo(pCorreo):
+def validarCorreoAux(pCorreo):
     '''
     Funcionamiento:
     -Entrada:
@@ -63,7 +65,7 @@ def validarCorreo(pCorreo):
         return "El correo no cumple con un dominio permitido"
     return True
 
-def validarTelefono(pTelefono):
+def validarTelefonoAux(pTelefono):
     '''
     Funcionamiento:
     -Entrada:
@@ -75,7 +77,7 @@ def validarTelefono(pTelefono):
         return "El telefono debe cumplir el formato ####-#### y no puede iniciar en 0,1,3 o 5"
     return True
 
-def validarPeso(pPeso):
+def validarPesoAux(pPeso):
     '''
     Funcionamiento:
     -Entrada:
@@ -93,7 +95,7 @@ def validarPeso(pPeso):
     return True
 
 #Funcion Aux 1 del menu principal:
-def guardarDonadores(pDonadores):
+def guardarDonadoresAux(pDonadores):
     '''
     Funcionamiento:
     -Entrada:
@@ -157,6 +159,70 @@ def confirmarAñoAux(pAño):
         return "No se puede usar ese año porque generaría personas mayores de 70 años"
     return True
 
+def generarCedulaAux():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se devuelve una cédula generada con el formato #-####-####
+    '''
+    provincia=random.randint(1,8)
+    tomo=random.randint(1000,9999)
+    asiento=random.randint(1000,9999)
+    return str(provincia)+"-"+str(tomo)+"-"+str(asiento)
+
+def generarNombreAux():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se devuelve una lista con nombre, primer apellido y segundo apellido generados aleatoriamente
+    '''
+    nombreCompleto=names.get_full_name().split()
+    while len(nombreCompleto)<3:
+        nombreCompleto=names.get_full_name().split()
+    return [nombreCompleto[0],nombreCompleto[1],nombreCompleto[2]]
+
+def generarFechaNacimientoAux(pAnnoMinimo):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el año mínimo permitido
+    -Salida:
+        Se devuelve una fecha de nacimiento aleatoria desde ese año hasta el año actual
+    '''
+    annoActual=time.localtime().tm_year
+    dia=random.randint(1,28)
+    mes=random.randint(1,12)
+    anno=random.randint(pAnnoMinimo,annoActual)
+    return (dia,mes,anno)
+
+def generarTelefonoAux():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se devuelve un teléfono generado con el formato ####-####
+    '''
+    primerDigito=random.choice(("2","4","6","7","8","9"))
+    resto=str(random.randint(100,999))
+    segundaParte=str(random.randint(1000,9999))
+    return primerDigito+resto+"-"+segundaParte
+
+def generarCorreoAux(pNombre,pApellido,pCorreos):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el nombre, apellido y correos permitidos
+    -Salida:
+        Se devuelve un correo generado automáticamente
+    '''
+    numero=random.randint(10,99)
+    return pNombre.lower()+pApellido.lower()+str(numero)+"@"+random.choice(pCorreos)
+
 #Funcion Aux 3 del menu principal:
 def buscarDonadorCedulaAux(pCedula,pDonadores):
     '''
@@ -185,18 +251,6 @@ def actualizarDatosDonadorAux(pPosicion,pDonadores,pCorreo,pTelefono,pPeso):
     pDonadores[pPosicion][5]=pPeso
     pDonadores[pPosicion][6]=pCorreo
     pDonadores[pPosicion][7]=pTelefono
-
-#Funcion Aux 3 del menu principal:
-def guardarCambiosDonadorAux(pDonadores):
-    '''
-    Funcionamiento:
-        Guarda los cambios realizados en memoria secundaria
-    -Entrada:
-        Se recibe la matriz actualizada
-    -Salida:
-        Se guardan los cambios
-    '''
-    guardarDonadores(pDonadores)
 
 #Funcion Aux 4 del menu principal:
 def confirmarEliminacionAux(pRespuesta):
@@ -228,7 +282,7 @@ def inactivarDonadorAux(pPosicion,pDonadores,pJustificacion):
     '''
     pDonadores[pPosicion][8]=0
     pDonadores[pPosicion][9]=pJustificacion
-    guardarDonadores(pDonadores)
+    guardarDonadoresAux(pDonadores)
     
 #Funcion Aux 5 del menu principal:
 def validarProvinciaAux(pProvincia):
@@ -278,7 +332,7 @@ def validarLugarRepetidoAux(pProvincia,pLugar,pLugaresDonacion):
     return True
 
 #Funcion Aux 3 del submenu:
-def obtenerNombreCompleto(pNombre):
+def obtenerNombreCompletoAux(pNombre):
     '''
     Funcionamiento:
     -Entrada:
@@ -304,7 +358,7 @@ def validarTipoSangreAux(pTipoSangre,pTiposSangre):
         return "Tipo de sangre inválido"
     return True
 
-def obtenerFechaTexto(pFecha):
+def obtenerFechaTextoAux(pFecha):
     '''
     Funcionamiento:
     -Entrada:
@@ -314,7 +368,7 @@ def obtenerFechaTexto(pFecha):
     '''
     return str(pFecha[0])+"/"+str(pFecha[1])+"/"+str(pFecha[2])
 
-def iniciarHTML(pArchivo,pTitulo):
+def iniciarHtmlAux(pArchivo,pTitulo):
     '''
     Funcionamiento:
     -Entrada:
@@ -327,7 +381,7 @@ def iniciarHTML(pArchivo,pTitulo):
     pArchivo.write("<h1>"+pTitulo+"</h1>\n")
     pArchivo.write("<p>Fecha y hora del sistema: "+fechaHora+"</p>\n")
 
-def finalizarHTML(pArchivo):
+def finalizarHtmlAux(pArchivo):
     '''
     Funcionamiento:
     -Entrada:

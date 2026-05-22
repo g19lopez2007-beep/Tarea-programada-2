@@ -48,22 +48,27 @@ def menuPrincipal(pDonadores):
         Se muestra el espacio donde luego irá la función correspondiente
     '''
     tiposSangre=("O+","O-","A+","A-","B+","B-","AB+","AB-")
-    nombres=("Carlos","María","José","Ana","Luis","Sofía","Pedro","Valeria","Andrés","Camila")
-    apellidos=("López","Mora","Castro","Vargas","Soto","Jiménez","Rojas","Ramírez","Arias","Solís")
     correos=("gmail.com","costarricense.cr","racsa.go.cr","ccss.sa.cr")
     lugaresDonacion={}
     while True:
         print("\n===== BANCO DE SANGRE =====\n1.Insertar donador\n2.Generar donadores\n3.Actualizar datos del donador\n4.Eliminar donador\n5.Insertar lugar de donación según provincia\n6.Reportes\n7.Salir")
         opcion=input("Digite una opción: ")
         if opcion=="1":
+            nombre=input("Digite el nombre: ")
+            apellido1=input("Digite el primer apellido: ")
+            apellido2=input("Digite el segundo apellido: ")
             cedula=input("Digite la cédula (#-####-####): ")
+            print("\n1.O+\n2.O-\n3.A+\n4.A-\n5.B+\n6.B-\n7.AB+\n8.AB-")
+            tipoSangre=input("Digite el tipo de sangre: ")
+            print("\n1.Masculino\n2.Femenino")
+            sexo=input("Digite el sexo: ")
             fecha=input("Digite la fecha de nacimiento (DD/MM/AAAA): ")
             correo=input("Digite el correo: ")
             telefono=input("Digite el teléfono (####-####): ")
             peso=input("Digite el peso: ")
-            print(insertarDonador(pDonadores,cedula,fecha,correo,telefono,peso))
+            print(insertarDonador(pDonadores,nombre,apellido1,apellido2,cedula,tipoSangre,fecha,sexo,correo,telefono,peso))
         elif opcion=="2":
-            pDonadores=generarDonadores(pDonadores,tiposSangre,nombres,apellidos,correos)
+            pDonadores=generarDonadores(pDonadores,tiposSangre,correos)
         elif opcion=="3":
             print("Aqui tiene que estar la funcion actualizarDonador")
         elif opcion=="4":
