@@ -22,9 +22,9 @@ def submenuReportes(pDonadores,pTiposSangre):
         elif opcion=="3":
             reporteTipoSangreProvincia(pDonadores,pTiposSangre)
         elif opcion=="4":
-            print("Aqui tiene que estar la funcion reporteListaCompletaDonadores")
+            reporteListaCompletaDonadores(pDonadores,pTiposSangre)
         elif opcion=="5":
-            print("Aqui tiene que estar la funcion reporteMujeresONegativo")
+            reporteMujeresONegativo(pDonadores)
         elif opcion=="6":
             print("Aqui tiene que estar la funcion reportePuedeDonar")
         elif opcion=="7":

@@ -229,6 +229,15 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
         return
     tipoSangre=int(tipoSangre)-1
     provincia=int(provincia)
+    encontrados=0
+    for donador in pDonadores:
+        if len(donador)>=10:
+            provinciaCedula=int(donador[1][0])
+            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
+                encontrados+=1
+    if encontrados==0:
+        print("No hay donadores que cumplan con los requisitos")
+        return
     archivo=open("reporteTipoSangreProvincia.html","w",encoding="utf-8")
     iniciarHtmlAux(archivo,"Reporte por tipo de sangre de una provincia dada")
     archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
@@ -245,6 +254,84 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
                 archivo.write("<td>"+donador[6]+"</td>")
                 archivo.write("</tr>\n")
                 encontrados+=1
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
+
+def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se genera un reporte HTML con la lista completa de donadores
+    '''
+    encontrados=0
+    for provincia in range(1,8):
+        for donador in pDonadores:
+            if len(donador)>=10:
+                provinciaCedula=int(donador[1][0])
+                if provinciaCedula==provincia:
+                    encontrados+=1
+    if encontrados==0:
+        print("No hay donadores que cumplan con los requisitos")
+        return
+    archivo=open("reporteListaCompletaDonadores.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Lista completa de donadores")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Tipo de sangre</th><th>Fecha de nacimiento</th><th>Peso</th><th>Sexo</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for provincia in range(1,8):
+        for donador in pDonadores:
+            if len(donador)>=10:
+                provinciaCedula=int(donador[1][0])
+                if provinciaCedula==provincia:
+                    archivo.write("<tr>")
+                    archivo.write("<td>"+donador[1]+"</td>")
+                    archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+                    archivo.write("<td>"+pTiposSangre[donador[2]]+"</td>")
+                    archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+                    archivo.write("<td>"+str(donador[5])+"</td>")
+                    archivo.write("<td>"+obtenerSexoTextoAux(donador[3])+"</td>")
+                    archivo.write("<td>"+donador[7]+"</td>")
+                    archivo.write("<td>"+donador[6]+"</td>")
+                    archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
+
+def reporteMujeresONegativo(pDonadores):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores
+    -Salida:
+        Se genera un reporte HTML con mujeres donantes O- menores de 45 años
+    '''
+    encontrados=0
+    for donador in pDonadores:
+        if len(donador)>=10:
+            edad=calcularEdadAux(donador[4])
+            if donador[8]==1 and donador[3]==False and donador[2]==1 and edad<45:
+                encontrados+=1
+    if encontrados==0:
+        print("No hay donadores que cumplan con los requisitos")
+        return
+    archivo=open("reporteMujeresONegativo.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Mujeres donantes O- menores de 45 años")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for donador in pDonadores:
+        if len(donador)>=10:
+            edad=calcularEdadAux(donador[4])
+            if donador[8]==1 and donador[3]==False and donador[2]==1 and edad<45:
+                archivo.write("<tr>")
+                archivo.write("<td>"+donador[1]+"</td>")
+                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+                archivo.write("<td>"+donador[7]+"</td>")
+                archivo.write("<td>"+donador[6]+"</td>")
+                archivo.write("</tr>\n")
     archivo.write("</table>\n")
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)

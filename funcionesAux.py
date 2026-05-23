@@ -390,3 +390,29 @@ def finalizarHtmlAux(pArchivo):
         Se cierra el HTML
     '''
     pArchivo.write("</body>\n</html>")
+
+def obtenerSexoTextoAux(pSexo):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el sexo del donador
+    -Salida:
+        Se devuelve Masculino o Femenino según corresponda
+    '''
+    if pSexo==True:
+        return "Masculino"
+    return "Femenino"
+
+def calcularEdadAux(pFecha):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la fecha de nacimiento en tupla
+    -Salida:
+        Se devuelve la edad actual de la persona
+    '''
+    fechaActual=time.localtime()
+    edad=fechaActual.tm_year-pFecha[2]
+    if fechaActual.tm_mon<pFecha[1] or (fechaActual.tm_mon==pFecha[1] and fechaActual.tm_mday<pFecha[0]):
+        edad-=1
+    return edad
