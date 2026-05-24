@@ -603,3 +603,56 @@ def reportePuedeRecibir(pDonadores,pTiposSangre):
     archivo.close()
     print("Reporte creado satisfactoriamente")
 
+#Funcion 8 submenu reportes:
+def reporteDonantesNoActivos(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se genera un reporte HTML con los donadores no activos
+    '''
+    encontrados=0
+    for donador in pDonadores:
+        if len(donador)>=10:
+            if donador[8]==0:
+                encontrados+=1
+    if encontrados==0:
+        print("No hay donadores no activos registrados")
+        return
+    archivo=open("reporteDonantesNoActivos.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte de donantes NO activos")
+    archivo.write("<table border='1'>\n")
+    archivo.write("<tr>")
+    archivo.write("<th>Justificación</th>")
+    archivo.write("<th>Cédula</th>")
+    archivo.write("<th>Nombre completo</th>")
+    archivo.write("<th>Tipo de sangre</th>")
+    archivo.write("<th>Fecha de nacimiento</th>")
+    archivo.write("<th>Peso</th>")
+    archivo.write("<th>Sexo</th>")
+    archivo.write("<th>Teléfono</th>")
+    archivo.write("<th>Correo</th>")
+    archivo.write("</tr>\n")
+    for donador in pDonadores:
+        if len(donador)>=10:
+            if donador[8]==0:
+                archivo.write("<tr>")
+                archivo.write("<td>"+obtenerJustificacionAux(donador[9])+"</td>")
+                archivo.write("<td>"+donador[1]+"</td>")
+                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+                archivo.write("<td>"+obtenerTipoSangreTextoAux(donador[2],pTiposSangre)+"</td>")
+                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+                archivo.write("<td>"+str(donador[5])+"</td>")
+                if donador[3]==True:
+                    archivo.write("<td>Masculino</td>")
+                else:
+                    archivo.write("<td>Femenino</td>")
+                archivo.write("<td>"+donador[7]+"</td>")
+                archivo.write("<td>"+donador[6]+"</td>")
+                archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
