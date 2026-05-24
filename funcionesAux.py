@@ -463,3 +463,37 @@ def puedeDonarAux(pTipoDonante,pTipoReceptor):
             return True
 
     return False
+
+#Funcion Aux reporte puede recibir:
+def puedeRecibirAux(pTipoReceptor,pTipoDonante):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre receptor y el tipo de sangre donante
+    -Salida:
+        Se devuelve True si puede recibir o False si no puede recibir
+    '''
+    if pTipoReceptor=="O-":
+        if pTipoDonante=="O-":
+            return True
+    elif pTipoReceptor=="O+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+":
+            return True
+    elif pTipoReceptor=="A-":
+        if pTipoDonante=="O-" or pTipoDonante=="A-":
+            return True
+    elif pTipoReceptor=="A+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+" or pTipoDonante=="A-" or pTipoDonante=="A+":
+            return True
+    elif pTipoReceptor=="B-":
+        if pTipoDonante=="O-" or pTipoDonante=="B-":
+            return True
+    elif pTipoReceptor=="B+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+" or pTipoDonante=="B-" or pTipoDonante=="B+":
+            return True
+    elif pTipoReceptor=="AB-":
+        if pTipoDonante=="O-" or pTipoDonante=="A-" or pTipoDonante=="B-" or pTipoDonante=="AB-":
+            return True
+    elif pTipoReceptor=="AB+":
+        return True
+    return False
