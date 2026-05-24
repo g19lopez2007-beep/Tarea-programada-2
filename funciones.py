@@ -602,3 +602,4 @@ def reportePuedeRecibir(pDonadores,pTiposSangre):
     finalizarHtmlAux(archivo)
     archivo.close()
     print("Reporte creado satisfactoriamente")
+

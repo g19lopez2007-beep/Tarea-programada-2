@@ -497,3 +497,29 @@ def puedeRecibirAux(pTipoReceptor,pTipoDonante):
     elif pTipoReceptor=="AB+":
         return True
     return False
+
+#Funcion Aux reporte donantes no activos:
+def obtenerJustificacionAux(pJustificacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el número de justificación del donador
+    -Salida:
+        Se devuelve la explicación completa de la justificación
+    '''
+    if pJustificacion==1:
+        return "Enfermedades infecciosas o crónicas"
+    elif pJustificacion==2:
+        return "Conductas de riesgo"
+    elif pJustificacion==3:
+        return "Factores de salud física"
+    elif pJustificacion==4:
+        return "Procedimientos médicos recientes"
+    elif pJustificacion==5:
+        return "Uso de medicamentos"
+    elif pJustificacion==6:
+        return "Estilo de vida o viajes recientes"
+    elif pJustificacion==7:
+        return "Embarazo, lactancia o menstruación"
+    else:
+        return "Justificación no registrada"
