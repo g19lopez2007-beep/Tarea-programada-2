@@ -415,3 +415,51 @@ def calcularEdadAux(pFechaNacimiento):
         if diaActual<diaNacimiento:
             edad=edad-1
     return edad
+
+#Funcion Aux reporte puede donar:
+
+def obtenerTipoSangreTextoAux(pTipo,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la posicion del tipo de sangre y la tupla de tipos de sangre
+    -Salida:
+        Se devuelve el tipo de sangre en texto
+    '''
+    return pTiposSangre[pTipo]
+
+#Funcion Aux reporte puede donar:
+
+def puedeDonarAux(pTipoDonante,pTipoReceptor):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre donante y receptor
+    -Salida:
+        Se devuelve True si puede donar o False si no puede donar
+    '''
+    if pTipoDonante=="O-":
+        return True
+    elif pTipoDonante=="O+":
+        if pTipoReceptor=="O+" or pTipoReceptor=="A+" or pTipoReceptor=="B+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="A-":
+        if pTipoReceptor=="A-" or pTipoReceptor=="A+" or pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="A+":
+        if pTipoReceptor=="A+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="B-":
+        if pTipoReceptor=="B-" or pTipoReceptor=="B+" or pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="B+":
+        if pTipoReceptor=="B+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="AB-":
+        if pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="AB+":
+        if pTipoReceptor=="AB+":
+            return True
+
+    return False
