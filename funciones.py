@@ -207,58 +207,7 @@ def insertarLugarDonacion(pLugaresDonacion):
     print("Lugar agregado correctamente")
     return pLugaresDonacion
 
-def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores y la tupla de tipos de sangre
-    -Salida:
-        Se genera un reporte HTML con donadores activos filtrados por tipo de sangre y provincia
-    '''
-    print("\n1.O+\n2.O-\n3.A+\n4.A-\n5.B+\n6.B-\n7.AB+\n8.AB-")
-    tipoSangre=input("Digite el tipo de sangre: ")
-    validarTipoSangre=validarTipoSangreAux(tipoSangre,pTiposSangre)
-    if validarTipoSangre!=True:
-        print(validarTipoSangre)
-        return
-    print("\n1.San José\n2.Alajuela\n3.Cartago\n4.Heredia\n5.Guanacaste\n6.Puntarenas\n7.Limón")
-    provincia=input("Digite el número de provincia: ")
-    validarProvincia=validarProvinciaAux(provincia)
-    if validarProvincia!=True:
-        print(validarProvincia)
-        return
-    tipoSangre=int(tipoSangre)-1
-    provincia=int(provincia)
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            provinciaCedula=int(donador[1][0])
-            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
-                encontrados+=1
-    if encontrados==0:
-        print("No hay donadores que cumplan con los requisitos")
-        return
-    archivo=open("reporteTipoSangreProvincia.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte por tipo de sangre de una provincia dada")
-    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            provinciaCedula=int(donador[1][0])
-            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
-                archivo.write("<tr>")
-                archivo.write("<td>"+donador[1]+"</td>")
-                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                archivo.write("<td>"+donador[7]+"</td>")
-                archivo.write("<td>"+donador[6]+"</td>")
-                archivo.write("</tr>\n")
-                encontrados+=1
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    print("Reporte creado satisfactoriamente")
+
 
 def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     '''
@@ -445,6 +394,61 @@ def reporteRangoEdad(pDonadores):
                 archivo.write("<td>"+donador[7]+"</td>")
                 archivo.write("<td>"+donador[6]+"</td>")
                 archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
+
+#Funcion 3 submenu reportes:
+
+def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se genera un reporte HTML con donadores activos filtrados por tipo de sangre y provincia
+    '''
+    print("\n1.O+\n2.O-\n3.A+\n4.A-\n5.B+\n6.B-\n7.AB+\n8.AB-")
+    tipoSangre=input("Digite el tipo de sangre: ")
+    validarTipoSangre=validarTipoSangreAux(tipoSangre,pTiposSangre)
+    if validarTipoSangre!=True:
+        print(validarTipoSangre)
+        return
+    print("\n1.San José\n2.Alajuela\n3.Cartago\n4.Heredia\n5.Guanacaste\n6.Puntarenas\n7.Limón")
+    provincia=input("Digite el número de provincia: ")
+    validarProvincia=validarProvinciaAux(provincia)
+    if validarProvincia!=True:
+        print(validarProvincia)
+        return
+    tipoSangre=int(tipoSangre)-1
+    provincia=int(provincia)
+    encontrados=0
+    for donador in pDonadores:
+        if len(donador)>=10:
+            provinciaCedula=int(donador[1][0])
+            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
+                encontrados+=1
+    if encontrados==0:
+        print("No hay donadores que cumplan con los requisitos")
+        return
+    archivo=open("reporteTipoSangreProvincia.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte por tipo de sangre de una provincia dada")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    encontrados=0
+    for donador in pDonadores:
+        if len(donador)>=10:
+            provinciaCedula=int(donador[1][0])
+            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
+                archivo.write("<tr>")
+                archivo.write("<td>"+donador[1]+"</td>")
+                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+                archivo.write("<td>"+donador[7]+"</td>")
+                archivo.write("<td>"+donador[6]+"</td>")
+                archivo.write("</tr>\n")
+                encontrados+=1
     archivo.write("</table>\n")
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
