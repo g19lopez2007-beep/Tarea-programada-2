@@ -337,3 +337,33 @@ def reporteMujeresONegativo(pDonadores):
     finalizarHtmlAux(archivo)
     archivo.close()
     print("Reporte creado satisfactoriamente")
+
+#Funcion 6 del menu principal:
+
+#Funcion 1 submenu reportes:
+def reporteDonantesProvincia(pDonadores):
+    '''
+    Funcionamiento:
+        Solicita una provincia y muestra los donadores
+        activos registrados en esa provincia
+    -Entrada:
+        Se recibe la matriz principal de donadores
+    -Salida:
+        Se imprime el reporte de donadores por provincia
+    '''
+    provincia=input("Digite la provincia: ")
+    encontrado=False
+    i=0
+    while i<len(pDonadores):
+        if pDonadores[i][8]==1 and pDonadores[i][10].lower()==provincia.lower():
+            print("\n===== DONADOR =====")
+            print("Nombre:",pDonadores[i][0])
+            print("Cédula:",pDonadores[i][1])
+            print("Tipo de sangre:",pDonadores[i][2])
+            print("Fecha nacimiento:",pDonadores[i][4])
+            print("Teléfono:",pDonadores[i][7])
+            print("Correo:",pDonadores[i][6])
+            encontrado=True
+        i+=1
+    if encontrado==False:
+        print("No hay donadores registrados en esa provincia")
