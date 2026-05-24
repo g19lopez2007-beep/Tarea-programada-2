@@ -5,20 +5,21 @@
 
 from funciones import *
 
-def submenuReportes(pDonadores,pTiposSangre):
+def submenuReportes(pDonadores,pTiposSangre,pLugaresDonacion):
     '''
     Funcionamiento:
     -Entrada:
         El usuario selecciona una opción del submenú de reportes
     -Salida:
+        Se ejecuta el reporte seleccionado o se regresa al menú principal
     '''
     while True:
         print("\n===== REPORTES =====\n1.Donantes por provincia\n2.Por rango de edad\n3.Por tipo de sangre de una provincia dada\n4.Lista completa de donadores\n5.Mujeres donantes O-\n6.¿A quién puede donar?\n7.¿De quién puede recibir?\n8.Donantes NO activos\n9.Lugares de donación\n10.Regresar")
         opcion=input("Digite una opción: ")
         if opcion=="1":
-            print("Aqui tiene que estar la funcion reporteDonantesProvincia")
+            reporteDonantesProvincia(pDonadores)
         elif opcion=="2":
-            print("Aqui tiene que estar la funcion reporteRangoEdad")
+            reporteRangoEdad(pDonadores)
         elif opcion=="3":
             reporteTipoSangreProvincia(pDonadores,pTiposSangre)
         elif opcion=="4":
@@ -26,13 +27,13 @@ def submenuReportes(pDonadores,pTiposSangre):
         elif opcion=="5":
             reporteMujeresONegativo(pDonadores)
         elif opcion=="6":
-            print("Aqui tiene que estar la funcion reportePuedeDonar")
+            reportePuedeDonar(pDonadores,pTiposSangre)
         elif opcion=="7":
-            print("Aqui tiene que estar la funcion reportePuedeRecibir")
+            reportePuedeRecibir(pDonadores,pTiposSangre)
         elif opcion=="8":
-            print("Aqui tiene que estar la funcion reporteDonantesNoActivos")
+            reporteDonantesNoActivos(pDonadores,pTiposSangre)
         elif opcion=="9":
-            print("Aqui tiene que estar la funcion reporteLugaresDonacion")
+            reporteLugaresDonacion(pDonadores,pLugaresDonacion)
         elif opcion=="10":
             print("Regresando al menú principal")
             break
