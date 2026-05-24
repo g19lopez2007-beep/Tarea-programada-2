@@ -341,16 +341,7 @@ def reporteMujeresONegativo(pDonadores):
 #Funcion 6 del menu principal:
 
 #Funcion 1 submenu reportes:
-def reporteDonantesProvincia(pDonadores):
-    '''
-    Funcionamiento:
-        Solicita una provincia y muestra los donadores
-        activos registrados en esa provincia
-    -Entrada:
-        Se recibe la matriz principal de donadores
-    -Salida:
-        Se imprime el reporte de donadores por provincia
-    '''
+
 def reporteDonantesProvincia(pDonadores):
     '''
     Funcionamiento:
