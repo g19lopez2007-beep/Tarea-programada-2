@@ -523,3 +523,29 @@ def obtenerJustificacionAux(pJustificacion):
         return "Embarazo, lactancia o menstruación"
     else:
         return "Justificación no registrada"
+    
+#Funcion Aux reporte lugares de donacion:
+def obtenerProvinciaTextoAux(pProvincia):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el número de provincia
+    -Salida:
+        Se devuelve el nombre de la provincia
+    '''
+    if pProvincia==1:
+        return "San José"
+    elif pProvincia==2:
+        return "Alajuela"
+    elif pProvincia==3:
+        return "Cartago"
+    elif pProvincia==4:
+        return "Heredia"
+    elif pProvincia==5:
+        return "Guanacaste"
+    elif pProvincia==6:
+        return "Puntarenas"
+    elif pProvincia==7:
+        return "Limón"
+    else:
+        return "Provincia no registrada"
