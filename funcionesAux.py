@@ -390,3 +390,28 @@ def finalizarHtmlAux(pArchivo):
         Se cierra el HTML
     '''
     pArchivo.write("</body>\n</html>")
+
+#Funcion Aux reporte rango edad:
+def calcularEdadAux(pFechaNacimiento):
+    '''
+    Funcionamiento:
+        Calcula la edad exacta del donador usando día, mes y año
+    -Entrada:
+        Se recibe la fecha de nacimiento en formato tupla: (dia,mes,anno)
+    -Salida:
+        Se devuelve la edad en años cumplidos
+    '''
+    fechaActual=time.localtime()
+    diaActual=fechaActual.tm_mday
+    mesActual=fechaActual.tm_mon
+    annoActual=fechaActual.tm_year
+    diaNacimiento=pFechaNacimiento[0]
+    mesNacimiento=pFechaNacimiento[1]
+    annoNacimiento=pFechaNacimiento[2]
+    edad=annoActual-annoNacimiento
+    if mesActual<mesNacimiento:
+        edad=edad-1
+    elif mesActual==mesNacimiento:
+        if diaActual<diaNacimiento:
+            edad=edad-1
+    return edad
