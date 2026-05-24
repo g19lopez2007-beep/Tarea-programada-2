@@ -209,46 +209,6 @@ def insertarLugarDonacion(pLugaresDonacion):
 
 
 
-def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores y la tupla de tipos de sangre
-    -Salida:
-        Se genera un reporte HTML con la lista completa de donadores
-    '''
-    encontrados=0
-    for provincia in range(1,8):
-        for donador in pDonadores:
-            if len(donador)>=10:
-                provinciaCedula=int(donador[1][0])
-                if provinciaCedula==provincia:
-                    encontrados+=1
-    if encontrados==0:
-        print("No hay donadores que cumplan con los requisitos")
-        return
-    archivo=open("reporteListaCompletaDonadores.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Lista completa de donadores")
-    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Tipo de sangre</th><th>Fecha de nacimiento</th><th>Peso</th><th>Sexo</th><th>Teléfono</th><th>Correo</th></tr>\n")
-    for provincia in range(1,8):
-        for donador in pDonadores:
-            if len(donador)>=10:
-                provinciaCedula=int(donador[1][0])
-                if provinciaCedula==provincia:
-                    archivo.write("<tr>")
-                    archivo.write("<td>"+donador[1]+"</td>")
-                    archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                    archivo.write("<td>"+pTiposSangre[donador[2]]+"</td>")
-                    archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                    archivo.write("<td>"+str(donador[5])+"</td>")
-                    archivo.write("<td>"+obtenerSexoTextoAux(donador[3])+"</td>")
-                    archivo.write("<td>"+donador[7]+"</td>")
-                    archivo.write("<td>"+donador[6]+"</td>")
-                    archivo.write("</tr>\n")
-    archivo.write("</table>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    print("Reporte creado satisfactoriamente")
 
 def reporteMujeresONegativo(pDonadores):
     '''
@@ -451,6 +411,50 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
                 encontrados+=1
     archivo.write("</table>\n")
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
+
+
+#Funcion 4 submenu reportes:
+
+def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se genera un reporte HTML con la lista completa de donadores
+    '''
+    encontrados=0
+    for provincia in range(1,8):
+        for donador in pDonadores:
+            if len(donador)>=10:
+                provinciaCedula=int(donador[1][0])
+                if provinciaCedula==provincia:
+                    encontrados+=1
+    if encontrados==0:
+        print("No hay donadores que cumplan con los requisitos")
+        return
+    archivo=open("reporteListaCompletaDonadores.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Lista completa de donadores")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Tipo de sangre</th><th>Fecha de nacimiento</th><th>Peso</th><th>Sexo</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for provincia in range(1,8):
+        for donador in pDonadores:
+            if len(donador)>=10:
+                provinciaCedula=int(donador[1][0])
+                if provinciaCedula==provincia:
+                    archivo.write("<tr>")
+                    archivo.write("<td>"+donador[1]+"</td>")
+                    archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+                    archivo.write("<td>"+pTiposSangre[donador[2]]+"</td>")
+                    archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+                    archivo.write("<td>"+str(donador[5])+"</td>")
+                    archivo.write("<td>"+obtenerSexoTextoAux(donador[3])+"</td>")
+                    archivo.write("<td>"+donador[7]+"</td>")
+                    archivo.write("<td>"+donador[6]+"</td>")
+                    archivo.write("</tr>\n")
+    archivo.write("</table>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
     print("Reporte creado satisfactoriamente")
