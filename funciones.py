@@ -656,3 +656,50 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
     finalizarHtmlAux(archivo)
     archivo.close()
     print("Reporte creado satisfactoriamente")
+
+#Funcion 9 submenu reportes:
+
+def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y el diccionario de lugares de donación
+    -Salida:
+        Se genera un reporte HTML con la cantidad de donadores por provincia
+        y los recintos posibles de recaudación
+    '''
+    archivo=open("reporteLugaresDonacion.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte de lugares de donación")
+    archivo.write("<table border='1'>\n")
+    archivo.write("<tr>")
+    archivo.write("<th>Provincia</th>")
+    archivo.write("<th>Cantidad de donadores registrados</th>")
+    archivo.write("<th>Recintos posibles de recaudación</th>")
+    archivo.write("</tr>\n")
+    provincia=1
+    while provincia<=7:
+        cantidad=0
+        for donador in pDonadores:
+            if len(donador)>=10:
+                if int(donador[1][0])==provincia:
+                    cantidad+=1
+        archivo.write("<tr>")
+        archivo.write("<td>"+obtenerProvinciaTextoAux(provincia)+"</td>")
+        archivo.write("<td>"+str(cantidad)+"</td>")
+        if provincia in pLugaresDonacion:
+            archivo.write("<td>")
+            i=0
+            while i<len(pLugaresDonacion[provincia]):
+                archivo.write(pLugaresDonacion[provincia][i])
+                if i<len(pLugaresDonacion[provincia])-1:
+                    archivo.write("<br>")
+                i+=1
+            archivo.write("</td>")
+        else:
+            archivo.write("<td>No hay lugares registrados</td>")
+        archivo.write("</tr>\n")
+        provincia+=1
+    archivo.write("</table>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    print("Reporte creado satisfactoriamente")
