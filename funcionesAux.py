@@ -391,28 +391,161 @@ def finalizarHtmlAux(pArchivo):
     '''
     pArchivo.write("</body>\n</html>")
 
-def obtenerSexoTextoAux(pSexo):
+#Funcion Aux reporte rango edad:
+def calcularEdadAux(pFechaNacimiento):
     '''
     Funcionamiento:
+        Calcula la edad exacta del donador usando día, mes y año
     -Entrada:
-        Se recibe el sexo del donador
+        Se recibe la fecha de nacimiento en formato tupla: (dia,mes,anno)
     -Salida:
-        Se devuelve Masculino o Femenino según corresponda
-    '''
-    if pSexo==True:
-        return "Masculino"
-    return "Femenino"
-
-def calcularEdadAux(pFecha):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la fecha de nacimiento en tupla
-    -Salida:
-        Se devuelve la edad actual de la persona
+        Se devuelve la edad en años cumplidos
     '''
     fechaActual=time.localtime()
-    edad=fechaActual.tm_year-pFecha[2]
-    if fechaActual.tm_mon<pFecha[1] or (fechaActual.tm_mon==pFecha[1] and fechaActual.tm_mday<pFecha[0]):
-        edad-=1
+    diaActual=fechaActual.tm_mday
+    mesActual=fechaActual.tm_mon
+    annoActual=fechaActual.tm_year
+    diaNacimiento=pFechaNacimiento[0]
+    mesNacimiento=pFechaNacimiento[1]
+    annoNacimiento=pFechaNacimiento[2]
+    edad=annoActual-annoNacimiento
+    if mesActual<mesNacimiento:
+        edad=edad-1
+    elif mesActual==mesNacimiento:
+        if diaActual<diaNacimiento:
+            edad=edad-1
     return edad
+
+#Funcion Aux reporte puede donar:
+
+def obtenerTipoSangreTextoAux(pTipo,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la posicion del tipo de sangre y la tupla de tipos de sangre
+    -Salida:
+        Se devuelve el tipo de sangre en texto
+    '''
+    return pTiposSangre[pTipo]
+
+#Funcion Aux reporte puede donar:
+
+def puedeDonarAux(pTipoDonante,pTipoReceptor):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre donante y receptor
+    -Salida:
+        Se devuelve True si puede donar o False si no puede donar
+    '''
+    if pTipoDonante=="O-":
+        return True
+    elif pTipoDonante=="O+":
+        if pTipoReceptor=="O+" or pTipoReceptor=="A+" or pTipoReceptor=="B+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="A-":
+        if pTipoReceptor=="A-" or pTipoReceptor=="A+" or pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="A+":
+        if pTipoReceptor=="A+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="B-":
+        if pTipoReceptor=="B-" or pTipoReceptor=="B+" or pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="B+":
+        if pTipoReceptor=="B+" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="AB-":
+        if pTipoReceptor=="AB-" or pTipoReceptor=="AB+":
+            return True
+    elif pTipoDonante=="AB+":
+        if pTipoReceptor=="AB+":
+            return True
+
+    return False
+
+#Funcion Aux reporte puede recibir:
+def puedeRecibirAux(pTipoReceptor,pTipoDonante):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre receptor y el tipo de sangre donante
+    -Salida:
+        Se devuelve True si puede recibir o False si no puede recibir
+    '''
+    if pTipoReceptor=="O-":
+        if pTipoDonante=="O-":
+            return True
+    elif pTipoReceptor=="O+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+":
+            return True
+    elif pTipoReceptor=="A-":
+        if pTipoDonante=="O-" or pTipoDonante=="A-":
+            return True
+    elif pTipoReceptor=="A+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+" or pTipoDonante=="A-" or pTipoDonante=="A+":
+            return True
+    elif pTipoReceptor=="B-":
+        if pTipoDonante=="O-" or pTipoDonante=="B-":
+            return True
+    elif pTipoReceptor=="B+":
+        if pTipoDonante=="O-" or pTipoDonante=="O+" or pTipoDonante=="B-" or pTipoDonante=="B+":
+            return True
+    elif pTipoReceptor=="AB-":
+        if pTipoDonante=="O-" or pTipoDonante=="A-" or pTipoDonante=="B-" or pTipoDonante=="AB-":
+            return True
+    elif pTipoReceptor=="AB+":
+        return True
+    return False
+
+#Funcion Aux reporte donantes no activos:
+def obtenerJustificacionAux(pJustificacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el número de justificación del donador
+    -Salida:
+        Se devuelve la explicación completa de la justificación
+    '''
+    if pJustificacion==1:
+        return "Enfermedades infecciosas o crónicas"
+    elif pJustificacion==2:
+        return "Conductas de riesgo"
+    elif pJustificacion==3:
+        return "Factores de salud física"
+    elif pJustificacion==4:
+        return "Procedimientos médicos recientes"
+    elif pJustificacion==5:
+        return "Uso de medicamentos"
+    elif pJustificacion==6:
+        return "Estilo de vida o viajes recientes"
+    elif pJustificacion==7:
+        return "Embarazo, lactancia o menstruación"
+    else:
+        return "Justificación no registrada"
+    
+#Funcion Aux reporte lugares de donacion:
+def obtenerProvinciaTextoAux(pProvincia):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el número de provincia
+    -Salida:
+        Se devuelve el nombre de la provincia
+    '''
+    if pProvincia==1:
+        return "San José"
+    elif pProvincia==2:
+        return "Alajuela"
+    elif pProvincia==3:
+        return "Cartago"
+    elif pProvincia==4:
+        return "Heredia"
+    elif pProvincia==5:
+        return "Guanacaste"
+    elif pProvincia==6:
+        return "Puntarenas"
+    elif pProvincia==7:
+        return "Limón"
+    else:
+        return "Provincia no registrada"
