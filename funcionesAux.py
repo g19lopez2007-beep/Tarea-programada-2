@@ -167,7 +167,7 @@ def generarCedulaAux():
     -Salida:
         Se devuelve una cédula generada con el formato #-####-####
     '''
-    provincia=random.randint(1,8)
+    provincia=random.randint(1,7)
     tomo=random.randint(1000,9999)
     asiento=random.randint(1000,9999)
     return str(provincia)+"-"+str(tomo)+"-"+str(asiento)
@@ -180,10 +180,10 @@ def generarNombreAux():
     -Salida:
         Se devuelve una lista con nombre, primer apellido y segundo apellido generados aleatoriamente
     '''
-    nombreCompleto=names.get_full_name().split()
-    while len(nombreCompleto)<3:
-        nombreCompleto=names.get_full_name().split()
-    return [nombreCompleto[0],nombreCompleto[1],nombreCompleto[2]]
+    nombre=names.get_first_name()
+    apellido1=names.get_last_name()
+    apellido2=names.get_last_name()
+    return [nombre,apellido1,apellido2]
 
 def generarFechaNacimientoAux(pAnnoMinimo):
     '''
