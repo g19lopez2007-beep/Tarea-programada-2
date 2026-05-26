@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 18/5/26
+#Ultima fecha de modificacion: 25/5/26
 #Version de python:3.14
 
 import re
@@ -417,7 +417,6 @@ def calcularEdadAux(pFechaNacimiento):
     return edad
 
 #Funcion Aux reporte puede donar:
-
 def obtenerTipoSangreTextoAux(pTipo,pTiposSangre):
     '''
     Funcionamiento:
@@ -461,7 +460,6 @@ def puedeDonarAux(pTipoDonante,pTipoReceptor):
     elif pTipoDonante=="AB+":
         if pTipoReceptor=="AB+":
             return True
-
     return False
 
 #Funcion Aux reporte puede recibir:
@@ -549,3 +547,15 @@ def obtenerProvinciaTextoAux(pProvincia):
         return "Limón"
     else:
         return "Provincia no registrada"
+    
+def obtenerSexoTextoAux(pSexo):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el sexo del donador
+    -Salida:
+        Se devuelve Masculino o Femenino según corresponda
+    '''
+    if pSexo==True:
+        return "Masculino"
+    return "Femenino"

@@ -1,11 +1,12 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 18/5/26
+#Ultima fecha de modificacion: 25/5/26
 #Version de python:3.14
 
 import pickle
 import random
 from funcionesAux import *
+from tkinter import *
 
 #Funcion para cargar automaticamente los donadores
 def cargarDonadores():
@@ -207,14 +208,7 @@ def insertarLugarDonacion(pLugaresDonacion):
     print("Lugar agregado correctamente")
     return pLugaresDonacion
 
-
-
-
-
-#Funcion 6 del menu principal:
-
 #Funcion 1 submenu reportes:
-
 def reporteDonantesProvincia(pDonadores):
     '''
     Funcionamiento:
@@ -325,7 +319,6 @@ def reporteRangoEdad(pDonadores):
     print("Reporte creado satisfactoriamente")
 
 #Funcion 3 submenu reportes:
-
 def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
     '''
     Funcionamiento:
@@ -381,7 +374,6 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
 
 
 #Funcion 4 submenu reportes:
-
 def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     '''
     Funcionamiento:
@@ -424,7 +416,6 @@ def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     print("Reporte creado satisfactoriamente")
 
 #Funcion 5 submenu reportes:
-
 def reporteMujeresONegativo(pDonadores):
     '''
     Funcionamiento:
@@ -463,7 +454,6 @@ def reporteMujeresONegativo(pDonadores):
     print("Reporte creado satisfactoriamente")
 
 #Funcion 6 submenu reportes:
-
 def reportePuedeDonar(pDonadores,pTiposSangre):
     '''
     Funcionamiento:
@@ -658,7 +648,6 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
     print("Reporte creado satisfactoriamente")
 
 #Funcion 9 submenu reportes:
-
 def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
     '''
     Funcionamiento:
@@ -703,3 +692,38 @@ def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
     finalizarHtmlAux(archivo)
     archivo.close()
     print("Reporte creado satisfactoriamente")
+
+def crearBoton(pVentana,pTexto,pComando):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, el texto del botón y la función que ejecutará
+    -Salida:
+        Se crea y muestra un botón en la ventana
+    '''
+    boton=Button(pVentana,text=pTexto,font=("Century Gothic",11),width=35,command=pComando)
+    boton.pack(pady=5)
+    return boton
+
+def mostrarMensaje(pTexto):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el texto que se desea mostrar
+    -Salida:
+        Se muestra una ventana pequeña con el mensaje indicado
+    '''
+    ventanaMensaje=Toplevel()
+    ventanaMensaje.title("Mensaje")
+    Label(ventanaMensaje,text=pTexto,font=("Century Gothic",14)).pack(padx=20,pady=20)
+
+def regresarMenuPrincipal(pVentanaPrincipal,pVentanaActual):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana principal y la ventana actual
+    -Salida:
+        Se cierra la ventana actual y se muestra la principal
+    '''
+    pVentanaActual.destroy()
+    pVentanaPrincipal.deiconify()
