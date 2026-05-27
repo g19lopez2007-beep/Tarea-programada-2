@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 25/5/26
+#Ultima fecha de modificacion: 26/5/26
 #Version de python:3.14
 
 import pickle
@@ -61,10 +61,19 @@ def insertarDonador(pDonadores,pNombre,pApellido1,pApellido2,pCedula,pTipoSangre
         sexo=True
     else:
         sexo=False
-    nuevo=[nombre,pCedula,tipoSangre,sexo,fechaNacimiento,float(pPeso),pCorreo,pTelefono,1,0]
+    justificacionEstado=obtenerJustificacionEstadoAux(fechaNacimiento,pPeso)
+    if justificacionEstado==True:
+        estado=1
+        justificacion=0
+    else:
+        estado=0
+        justificacion=justificacionEstado
+    nuevo=[nombre,pCedula,tipoSangre,sexo,fechaNacimiento,float(pPeso),pCorreo,pTelefono,estado,justificacion]
     pDonadores.append(nuevo)
     guardarDonadoresAux(pDonadores)
-    return "Donador registrado correctamente"
+    if estado==1:
+        return "Donador registrado correctamente"
+    return "Donador registrado correctamente (Estado inactivo: "+justificacion+")"
 
 #Funcion 2 del menu principal:
 def generarDonadores(pBaseDatos,pTiposSangre,pCorreos):
@@ -99,16 +108,12 @@ def generarDonadores(pBaseDatos,pTiposSangre,pCorreos):
         tipoSangre=random.randint(0,len(pTiposSangre)-1)
         sexo=random.choice((True,False))
         fechaNacimiento=generarFechaNacimientoAux(añoMinimo)
-        peso=random.randint(45,130)
+        peso=random.randint(51,119)
         correo=generarCorreoAux(nombre[0],nombre[1],pCorreos)
         telefono=generarTelefonoAux()
-        estado=random.choice((1,0))
-        if estado==1:
-            justificacion=0
-            contadorActivos+=1
-        else:
-            justificacion=random.randint(1,7)
-            contadorInactivos+=1
+        estado=1
+        justificacion=0
+        contadorActivos+=1
         pBaseDatos.append([nombre,cedula,tipoSangre,sexo,fechaNacimiento,float(peso),correo,telefono,estado,justificacion])
     print("Se generaron correctamente",cantidad,"donadores\nDonadores activos:",contadorActivos,"\nDonadores no activos:",contadorInactivos)
     guardarDonadoresAux(pBaseDatos)
@@ -634,10 +639,7 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
                 archivo.write("<td>"+obtenerTipoSangreTextoAux(donador[2],pTiposSangre)+"</td>")
                 archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
                 archivo.write("<td>"+str(donador[5])+"</td>")
-                if donador[3]==True:
-                    archivo.write("<td>Masculino</td>")
-                else:
-                    archivo.write("<td>Femenino</td>")
+                archivo.write("<td>"+obtenerSexoTextoAux(donador[3])+"</td>")
                 archivo.write("<td>"+donador[7]+"</td>")
                 archivo.write("<td>"+donador[6]+"</td>")
                 archivo.write("</tr>\n")
@@ -727,3 +729,90 @@ def regresarMenuPrincipal(pVentanaPrincipal,pVentanaActual):
     '''
     pVentanaActual.destroy()
     pVentanaPrincipal.deiconify()
+
+def registrarDonadorTk(pVentanaPrincipal,pVentanaInsertar,pDonadores,pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pTiposSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se reciben las cajas de texto y variables usadas en la ventana de insertar donador
+    -Salida:
+        Se llama a la función insertarDonador y se muestra el mensaje correspondiente
+    '''
+    tipoSangre="0"
+    for i in range(len(pTiposSangre)):
+        if pTiposSangre[i]==pTipoSangre.get():
+            tipoSangre=str(i+1)
+    mensaje=insertarDonador(pDonadores,pNombre.get(),pApellido1.get(),pApellido2.get(),pCedula.get(),tipoSangre,pFecha.get(),pSexo.get(),pCorreo.get(),pTelefono.get(),pPeso.get())
+    mostrarMensaje(mensaje)
+    if "Donador registrado correctamente" in mensaje:
+        regresarMenuPrincipal(pVentanaPrincipal,pVentanaInsertar)
+
+def limpiarInsertarDonadorTk(pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se reciben las cajas de texto y variables del formulario
+    -Salida:
+        Se limpian todos los datos de la ventana
+    '''
+    pNombre.delete(0,END)
+    pApellido1.delete(0,END)
+    pApellido2.delete(0,END)
+    pCedula.delete(0,END)
+    pFecha.delete(0,END)
+    pCorreo.delete(0,END)
+    pTelefono.delete(0,END)
+    pPeso.delete(0,END)
+    pTipoSangre.set("O+")
+    pSexo.set("1")
+
+def abrirInsertarDonador(pVentana,pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana principal, la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se muestra la ventana para insertar un nuevo donador
+    '''
+    pVentana.withdraw()
+    ventanaInsertar=Toplevel()
+    ventanaInsertar.title("Insertar donador")
+    ventanaInsertar.geometry("600x650")
+    Label(ventanaInsertar,text="INSERTAR DONADOR",font=("Century Gothic",14,"bold")).pack(pady=15)
+    frame=Frame(ventanaInsertar)
+    frame.pack()
+    Label(frame,text="Nombre:",font=("Century Gothic",12)).grid(row=0,column=0,pady=5,sticky="w")
+    nombre=Entry(frame,font=("Century Gothic",12))
+    nombre.grid(row=0,column=1,pady=5)
+    Label(frame,text="Primer apellido:",font=("Century Gothic",12)).grid(row=1,column=0,pady=5,sticky="w")
+    apellido1=Entry(frame,font=("Century Gothic",12))
+    apellido1.grid(row=1,column=1,pady=5)
+    Label(frame,text="Segundo apellido:",font=("Century Gothic",12)).grid(row=2,column=0,pady=5,sticky="w")
+    apellido2=Entry(frame,font=("Century Gothic",12))
+    apellido2.grid(row=2,column=1,pady=5)
+    Label(frame,text="Cédula (#-####-####):",font=("Century Gothic",12)).grid(row=3,column=0,pady=5,sticky="w")
+    cedula=Entry(frame,font=("Century Gothic",12))
+    cedula.grid(row=3,column=1,pady=5)
+    Label(frame,text="Tipo de sangre:",font=("Century Gothic",12)).grid(row=4,column=0,pady=5,sticky="w")
+    tipoSangre=StringVar()
+    tipoSangre.set(pTiposSangre[0])
+    OptionMenu(frame,tipoSangre,*pTiposSangre).grid(row=4,column=1,pady=5,sticky="w")
+    sexo=StringVar()
+    sexo.set("1")
+    Radiobutton(frame,text="Masculino",variable=sexo,value="1",font=("Century Gothic",12)).grid(row=5,column=1,sticky="w")
+    Radiobutton(frame,text="Femenino",variable=sexo,value="2",font=("Century Gothic",12)).grid(row=6,column=1,sticky="w")
+    Label(frame,text="Fecha nacimiento (DD/MM/AAAA):",font=("Century Gothic",12)).grid(row=7,column=0,pady=5,sticky="w")
+    fecha=Entry(frame,font=("Century Gothic",12))
+    fecha.grid(row=7,column=1,pady=5)
+    Label(frame,text="Correo:",font=("Century Gothic",12)).grid(row=8,column=0,pady=5,sticky="w")
+    correo=Entry(frame,font=("Century Gothic",12))
+    correo.grid(row=8,column=1,pady=5)
+    Label(frame,text="Teléfono (####-####):",font=("Century Gothic",12)).grid(row=9,column=0,pady=5,sticky="w")
+    telefono=Entry(frame,font=("Century Gothic",12))
+    telefono.grid(row=9,column=1,pady=5)
+    Label(frame,text="Peso:",font=("Century Gothic",12)).grid(row=10,column=0,pady=5,sticky="w")
+    peso=Entry(frame,font=("Century Gothic",12))
+    peso.grid(row=10,column=1,pady=5)
+    Button(ventanaInsertar,text="Registrar",font=("Century Gothic",12,"bold"),width=35,command=lambda:registrarDonadorTk(pVentana,ventanaInsertar,pDonadores,nombre,apellido1,apellido2,cedula,tipoSangre,pTiposSangre,fecha,sexo,correo,telefono,peso)).pack(pady=5)
+    Button(ventanaInsertar,text="Limpiar",font=("Century Gothic",12,"bold"),width=35,command=lambda:limpiarInsertarDonadorTk(nombre,apellido1,apellido2,cedula,tipoSangre,fecha,sexo,correo,telefono,peso)).pack(pady=5)
+    Button(ventanaInsertar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaInsertar)).pack(pady=5)

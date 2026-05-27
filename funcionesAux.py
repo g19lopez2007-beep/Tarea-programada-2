@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 25/5/26
+#Ultima fecha de modificacion: 26/5/26
 #Version de python:3.14
 
 import re
@@ -87,11 +87,6 @@ def validarPesoAux(pPeso):
     '''
     if not re.match("^[0-9]{2,3}$",pPeso):
         return "El peso minimo debe ser de 2 digitos y maximo de 3 digitos"
-    peso=float(pPeso)
-    if peso<=50:
-        return "El peso debe ser mayor a 50"
-    if peso>=120:
-        return "El peso debe ser menor a 120"
     return True
 
 #Funcion Aux 1 del menu principal:
@@ -106,6 +101,49 @@ def guardarDonadoresAux(pDonadores):
     archivo=open("donadores.dat","wb")
     pickle.dump(pDonadores,archivo)
     archivo.close()
+
+def validarEdadDonadorAux(pFechaNacimiento):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la fecha de nacimiento del donador
+    -Salida:
+        Se devuelve True si el donador cumple con la edad mínima o False si no cumple
+    '''
+    edad=calcularEdadAux(pFechaNacimiento)
+    if edad>=18:
+        return True
+    return False
+
+def validarPesoDonadorAux(pPeso):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el peso del donador
+    -Salida:
+        Se devuelve True si el peso cumple con el rango permitido o False si no cumple
+    '''
+    peso=float(pPeso)
+    if peso>50 and peso<120:
+        return True
+    return False
+
+def obtenerJustificacionEstadoAux(pFechaNacimiento,pPeso):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la fecha de nacimiento y el peso del donador
+    -Salida:
+        Se devuelve la justificación correspondiente si el donador queda inactivo
+    '''
+    if validarEdadDonadorAux(pFechaNacimiento)==False:
+        return "Menor de edad"
+    if validarPesoDonadorAux(pPeso)==False:
+        peso=float(pPeso)
+        if peso<=50:
+            return "Pesa menos de 50kg"
+        return "Pesa más de 120kg"
+    return True
 
 #Funcion Aux 2 del menu principal:
 def validarCantidadAux(pCantidad):
@@ -505,6 +543,8 @@ def obtenerJustificacionAux(pJustificacion):
     -Salida:
         Se devuelve la explicación completa de la justificación
     '''
+    if type(pJustificacion)==str:
+        return pJustificacion
     if pJustificacion==1:
         return "Enfermedades infecciosas o crónicas"
     elif pJustificacion==2:

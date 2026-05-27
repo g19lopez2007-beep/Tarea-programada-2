@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 25/5/26
+#Ultima fecha de modificacion: 26/5/26
 #Version de python:3.14
 
 from funciones import *
@@ -18,7 +18,7 @@ def abrirSubmenuReportes(pVentana,pDonadores,pTiposSangre,pLugaresDonacion):
     ventanaReportes=Toplevel()
     ventanaReportes.title("Reportes")
     ventanaReportes.geometry("500x600")
-    Label(ventanaReportes,text="REPORTES",font=("Century Gothic",14)).pack(pady=15)
+    Label(ventanaReportes,text="REPORTES",font=("Century Gothic",14,"bold")).pack(pady=15)
     crearBoton(ventanaReportes,"1.Donantes por provincia",lambda:mostrarMensaje("Aquí irá reporteDonantesProvincia"))
     crearBoton(ventanaReportes,"2.Por rango de edad",lambda:mostrarMensaje("Aquí irá reporteRangoEdad"))
     crearBoton(ventanaReportes,"3.Por tipo de sangre de una provincia",lambda:mostrarMensaje("Aquí irá reporteTipoSangreProvincia"))
@@ -44,7 +44,7 @@ def menuPrincipal(pDonadores):
     ventana.title("Banco de Sangre")
     ventana.geometry("500x500")
     Label(ventana,text="BANCO DE SANGRE",font=("Century Gothic",14,"bold")).pack(pady=15)
-    crearBoton(ventana,"1.Insertar donador",lambda:mostrarMensaje("Aquí irá insertarDonador"))
+    crearBoton(ventana,"1.Insertar donador",lambda:abrirInsertarDonador(ventana,pDonadores,tiposSangre))
     crearBoton(ventana,"2.Generar donadores",lambda:mostrarMensaje("Aquí irá generarDonadores"))
     crearBoton(ventana,"3.Actualizar datos del donador",lambda:mostrarMensaje("Aquí irá actualizarDonador"))
     crearBoton(ventana,"4.Eliminar donador",lambda:mostrarMensaje("Aquí irá eliminarDonador"))
