@@ -23,7 +23,7 @@ def abrirSubmenuReportes(pVentana,pDonadores,pTiposSangre,pLugaresDonacion):
     crearBoton(ventanaReportes,"2.Por rango de edad",lambda:mostrarMensaje("Aquí irá reporteRangoEdad"))
     crearBoton(ventanaReportes,"3.Por tipo de sangre de una provincia",lambda:mostrarMensaje("Aquí irá reporteTipoSangreProvincia"))
     crearBoton(ventanaReportes,"4.Lista completa de donadores",lambda:reporteListaCompletaDonadores(pDonadores,pTiposSangre))
-    crearBoton(ventanaReportes,"5.Mujeres donantes O-",lambda:mostrarMensaje("Aquí irá reporteMujeresONegativo"))
+    crearBoton(ventanaReportes,"5.Mujeres donantes O-",lambda:reporteMujeresONegativo(pDonadores))
     crearBoton(ventanaReportes,"6.¿A quién puede donar?",lambda:mostrarMensaje("Aquí irá reportePuedeDonar"))
     crearBoton(ventanaReportes,"7.¿De quién puede recibir?",lambda:mostrarMensaje("Aquí irá reportePuedeRecibir"))
     crearBoton(ventanaReportes,"8.Donantes NO activos",lambda:mostrarMensaje("Aquí irá reporteDonantesNoActivos"))
