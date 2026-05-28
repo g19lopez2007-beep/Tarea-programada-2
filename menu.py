@@ -49,7 +49,7 @@ def menuPrincipal(pDonadores):
     crearBoton(ventana,"1.Insertar donador",lambda:abrirInsertarDonador(ventana,pDonadores,tiposSangre))
     crearBoton(ventana,"2.Generar donadores",lambda:abrirGenerarDonadores(ventana,pDonadores,tiposSangre,correos,boton3,boton4,boton6))
     boton3=crearBoton(ventana,"3.Actualizar datos del donador",lambda:mostrarMensaje("Aquí irá actualizarDonador"))
-    boton4=crearBoton(ventana,"4.Eliminar donador",lambda:mostrarMensaje("Aquí irá eliminarDonador"))
+    boton4=crearBoton(ventana,"4.Eliminar donador",lambda:ventanaEliminarDonador(pDonadores))
     crearBoton(ventana,"5.Insertar lugar de donación",lambda:mostrarMensaje("Aquí irá insertarLugarDonacion"))
     boton6=crearBoton(ventana,"6.Reportes",lambda:abrirSubmenuReportes(ventana,pDonadores,tiposSangre,lugaresDonacion))
     crearBoton(ventana,"7.Salir",ventana.destroy)
