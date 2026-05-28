@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 26/5/26
+#Ultima fecha de modificacion: 27/5/26
 #Version de python:3.14
 
 import re
@@ -162,41 +162,6 @@ def validarCantidadAux(pCantidad):
         return "La cantidad debe ser mayor a 0"
     return True
 
-#Funcion Aux 2 del menu principal:
-def validarAñoAux(pAño):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el año mínimo ingresado por el usuario
-    -Salida:
-        Se devuelve True si el año es válido o un mensaje de error
-    '''
-    añoActual=time.localtime().tm_year
-    try:
-        pAño=int(pAño)
-    except:
-        return "El año debe ser numérico"
-    if pAño>añoActual:
-        return "El año no puede ser mayor al actual"
-    return True
-
-#Funcion Aux 2 del menu principal:
-def confirmarAñoAux(pAño):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el año mínimo ingresado por el usuario
-    -Salida:
-        Se devuelve True si el año permite generar personas entre 18 y 70 años o un mensaje de error
-    '''
-    añoActual=time.localtime().tm_year
-    edadMaxima=añoActual-int(pAño)
-    if edadMaxima<18:
-        return "No se puede usar ese año porque generaría personas menores de 18 años"
-    if edadMaxima>70:
-        return "No se puede usar ese año porque generaría personas mayores de 70 años"
-    return True
-
 def generarCedulaAux():
     '''
     Funcionamiento:
@@ -223,19 +188,22 @@ def generarNombreAux():
     apellido2=names.get_last_name()
     return [nombre,apellido1,apellido2]
 
-def generarFechaNacimientoAux(pAnnoMinimo):
+def generarFechaNacimientoAux():
     '''
     Funcionamiento:
     -Entrada:
-        Se recibe el año mínimo permitido
+        No recibe datos
     -Salida:
-        Se devuelve una fecha de nacimiento aleatoria desde ese año hasta el año actual
+        Se devuelve una fecha de nacimiento aleatoria de una persona mayor de edad
     '''
     annoActual=time.localtime().tm_year
-    dia=random.randint(1,28)
-    mes=random.randint(1,12)
-    anno=random.randint(pAnnoMinimo,annoActual)
-    return (dia,mes,anno)
+    while True:
+        dia=random.randint(1,28)
+        mes=random.randint(1,12)
+        anno=random.randint(annoActual-70,annoActual-18)
+        fecha=(dia,mes,anno)
+        if calcularEdadAux(fecha)>=18:
+            return fecha
 
 def generarTelefonoAux():
     '''
@@ -599,3 +567,20 @@ def obtenerSexoTextoAux(pSexo):
     if pSexo==True:
         return "Masculino"
     return "Femenino"
+
+def validarBotonesMenuAux(pDonadores,pBoton3,pBoton4,pBoton6):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y los botones que dependen de la base de datos
+    -Salida:
+        Se activan o desactivan los botones según existan donadores registrados
+    '''
+    if len(pDonadores)==0:
+        pBoton3.config(state="disabled")
+        pBoton4.config(state="disabled")
+        pBoton6.config(state="disabled")
+    else:
+        pBoton3.config(state="normal")
+        pBoton4.config(state="normal")
+        pBoton6.config(state="normal")

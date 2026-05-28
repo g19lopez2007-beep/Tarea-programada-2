@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 26/5/26
+#Ultima fecha de modificacion: 27/5/26
 #Version de python:3.14
 
 import pickle
@@ -76,7 +76,7 @@ def insertarDonador(pDonadores,pNombre,pApellido1,pApellido2,pCedula,pTipoSangre
     return "Donador registrado correctamente (Estado inactivo: "+justificacion+")"
 
 #Funcion 2 del menu principal:
-def generarDonadores(pBaseDatos,pTiposSangre,pCorreos):
+def generarDonadores(pBaseDatos,pTiposSangre,pCorreos,pCantidad):
     '''
     Funcionamiento:
     -Entrada:
@@ -84,30 +84,17 @@ def generarDonadores(pBaseDatos,pTiposSangre,pCorreos):
     -Salida:
         Se agregan donadores generados automáticamente a la matriz principal
     '''
-    cantidad=input("Digite la cantidad de donadores que desea generar: ")
-    validarCantidad=validarCantidadAux(cantidad)
+    validarCantidad=validarCantidadAux(pCantidad)
     if validarCantidad!=True:
-        print(validarCantidad)
-        return pBaseDatos
-    añoMinimo=input("Digite el año mínimo de nacimiento: ")
-    validarAño=validarAñoAux(añoMinimo)
-    if validarAño!=True:
-        print(validarAño)
-        return pBaseDatos
-    validar=confirmarAñoAux(añoMinimo)
-    if validar!=True:
-        print(validar)
-        return pBaseDatos
-    cantidad=int(cantidad)
-    añoMinimo=int(añoMinimo)
+        return validarCantidad
+    cantidad=int(pCantidad)
     contadorActivos=0
-    contadorInactivos=0
     for i in range(cantidad):
         nombre=generarNombreAux()
         cedula=generarCedulaAux()
         tipoSangre=random.randint(0,len(pTiposSangre)-1)
         sexo=random.choice((True,False))
-        fechaNacimiento=generarFechaNacimientoAux(añoMinimo)
+        fechaNacimiento=generarFechaNacimientoAux()
         peso=random.randint(51,119)
         correo=generarCorreoAux(nombre[0],nombre[1],pCorreos)
         telefono=generarTelefonoAux()
@@ -115,9 +102,8 @@ def generarDonadores(pBaseDatos,pTiposSangre,pCorreos):
         justificacion=0
         contadorActivos+=1
         pBaseDatos.append([nombre,cedula,tipoSangre,sexo,fechaNacimiento,float(peso),correo,telefono,estado,justificacion])
-    print("Se generaron correctamente",cantidad,"donadores\nDonadores activos:",contadorActivos,"\nDonadores no activos:",contadorInactivos)
     guardarDonadoresAux(pBaseDatos)
-    return pBaseDatos
+    return "Se generaron correctamente "+str(cantidad)+" donadores"
 
 #Funcion 3 del menu principal:
 def actualizarDonador(pDonadores):
@@ -730,7 +716,7 @@ def regresarMenuPrincipal(pVentanaPrincipal,pVentanaActual):
     pVentanaActual.destroy()
     pVentanaPrincipal.deiconify()
 
-def registrarDonadorTk(pVentanaPrincipal,pVentanaInsertar,pDonadores,pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pTiposSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso):
+def registrarDonadorTk(pVentanaPrincipal,pVentanaInsertar,pDonadores,pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pTiposSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso,pBoton3,pBoton4,pBoton6):
     '''
     Funcionamiento:
     -Entrada:
@@ -745,6 +731,9 @@ def registrarDonadorTk(pVentanaPrincipal,pVentanaInsertar,pDonadores,pNombre,pAp
     mensaje=insertarDonador(pDonadores,pNombre.get(),pApellido1.get(),pApellido2.get(),pCedula.get(),tipoSangre,pFecha.get(),pSexo.get(),pCorreo.get(),pTelefono.get(),pPeso.get())
     mostrarMensaje(mensaje)
     if "Donador registrado correctamente" in mensaje:
+        pBoton3.config(state="normal")
+        pBoton4.config(state="normal")
+        pBoton6.config(state="normal")
         regresarMenuPrincipal(pVentanaPrincipal,pVentanaInsertar)
 
 def limpiarInsertarDonadorTk(pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso):
@@ -816,3 +805,38 @@ def abrirInsertarDonador(pVentana,pDonadores,pTiposSangre):
     Button(ventanaInsertar,text="Registrar",font=("Century Gothic",12,"bold"),width=35,command=lambda:registrarDonadorTk(pVentana,ventanaInsertar,pDonadores,nombre,apellido1,apellido2,cedula,tipoSangre,pTiposSangre,fecha,sexo,correo,telefono,peso)).pack(pady=5)
     Button(ventanaInsertar,text="Limpiar",font=("Century Gothic",12,"bold"),width=35,command=lambda:limpiarInsertarDonadorTk(nombre,apellido1,apellido2,cedula,tipoSangre,fecha,sexo,correo,telefono,peso)).pack(pady=5)
     Button(ventanaInsertar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaInsertar)).pack(pady=5)
+
+def generarDonadoresTk(pVentanaPrincipal,pVentanaGenerar,pDonadores,pTiposSangre,pCorreos,pCantidad,pBoton3,pBoton4,pBoton6):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se reciben los datos escritos en la ventana para generar donadores
+    -Salida:
+        Se generan donadores y se muestra el mensaje correspondiente
+    '''
+    mensaje=generarDonadores(pDonadores,pTiposSangre,pCorreos,pCantidad.get())
+    mostrarMensaje(mensaje)
+    if "Se generaron correctamente" in mensaje:
+        pBoton3.config(state="normal")
+        pBoton4.config(state="normal")
+        pBoton6.config(state="normal")
+        regresarMenuPrincipal(pVentanaPrincipal,pVentanaGenerar)
+
+def abrirGenerarDonadores(pVentana,pDonadores,pTiposSangre,pCorreos,pBoton3,pBoton4,pBoton6):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana principal, la matriz de donadores, tipos de sangre y correos
+    -Salida:
+        Se muestra la ventana para generar donadores
+    '''
+    pVentana.withdraw()
+    ventanaGenerar=Toplevel()
+    ventanaGenerar.title("Generar donadores")
+    ventanaGenerar.geometry("500x250")
+    Label(ventanaGenerar,text="GENERAR DONADORES",font=("Century Gothic",14,"bold")).pack(pady=15)
+    Label(ventanaGenerar,text="Cantidad:",font=("Century Gothic",12)).pack()
+    cantidad=Entry(ventanaGenerar,font=("Century Gothic",12),width=35)
+    cantidad.pack(pady=5)
+    Button(ventanaGenerar,text="Generar",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarDonadoresTk(pVentana,ventanaGenerar,pDonadores,pTiposSangre,pCorreos,cantidad,pBoton3,pBoton4,pBoton6)).pack(pady=5)
+    Button(ventanaGenerar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaGenerar)).pack(pady=5)
