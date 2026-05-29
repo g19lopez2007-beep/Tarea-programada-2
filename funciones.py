@@ -8,6 +8,7 @@ import random
 from tkinter import messagebox
 from funcionesAux import *
 from tkinter import *
+import webbrowser
 
 #Funcion para cargar automaticamente los donadores
 def cargarDonadores():
@@ -175,7 +176,7 @@ def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
     -Entrada:
         Se recibe la matriz de donadores, la cédula y la justificación ingresada desde tkinter
     -Salida:
-        Se cambia el estado del donador a inactivo o se devuelve un mensaje
+        Se cambia el estado del donador a inactivo sin eliminarlo físicamente
     '''
     validarCedula=validarCedulaAux(pCedula)
     if validarCedula!=True:
@@ -185,9 +186,8 @@ def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
         return "La persona con el número de cédula: "+pCedula+" no está registrada."
     if pJustificacion.strip()=="":
         return "Debe ingresar una justificación"
-    pDonadores[posicion][8]=0
-    pDonadores[posicion][9]=pJustificacion
-    guardarDonadoresAux(pDonadores)
+    justificacionCompleta=obtenerJustificacionAux(pJustificacion)
+    inactivarDonadorAux(posicion,pDonadores,justificacionCompleta)
     return "Donador eliminado satisfactoriamente"
 
 def ventanaEliminarDonador(pDonadores):
@@ -200,30 +200,26 @@ def ventanaEliminarDonador(pDonadores):
     '''
     ventanaEliminar=Toplevel()
     ventanaEliminar.title("Eliminar donador")
-    ventanaEliminar.geometry("400x300")
-    Label(
-        ventanaEliminar,
-        text="ELIMINAR DONADOR",
-        font=("Century Gothic",14,"bold")).pack(pady=10)
-    Label(
-        ventanaEliminar,
-        text="Digite la cédula").pack()
+    ventanaEliminar.geometry("400x350")
+    Label(ventanaEliminar,text="ELIMINAR DONADOR",font=("Century Gothic",14,"bold")).pack(pady=10)
+    Label(ventanaEliminar,text="Digite la cédula").pack()
     entradaCedula=Entry(ventanaEliminar)
     entradaCedula.pack(pady=5)
-    Label(
-        ventanaEliminar,
-        text="Digite la justificación").pack()
+    Label(ventanaEliminar,text="Digite la justificación").pack()
     entradaJustificacion=Entry(ventanaEliminar)
     entradaJustificacion.pack(pady=5)
+
     def confirmarEliminar():
-        respuesta=messagebox.askyesno(
-            "Confirmar eliminación",
-            "¿Desea confirmar la eliminación del donador?")
+        """
+        Funcionamiento:confirma la eliminación del donador y muestra el resultado
+        -Entrada:
+            Se reciben los datos del donador a eliminar
+        -Salida:
+            Se muestra un mensaje con el resultado de la operación
+        """
+        respuesta=messagebox.askyesno("Confirmar eliminación","¿Desea confirmar la eliminación del donador?")
         if respuesta==True:
-            mensaje=eliminarDonadorTk(
-                pDonadores,
-                entradaCedula.get(),
-                entradaJustificacion.get())
+            mensaje=eliminarDonadorTk(pDonadores,entradaCedula.get(),entradaJustificacion.get())
             messagebox.showinfo("Resultado",mensaje)
             if mensaje=="Donador eliminado satisfactoriamente":
                 ventanaEliminar.destroy()
@@ -231,7 +227,6 @@ def ventanaEliminarDonador(pDonadores):
             messagebox.showinfo("Resultado","Donador NO eliminado")
     Button(ventanaEliminar,text="Eliminar",command=confirmarEliminar).pack(pady=10)
     Button(ventanaEliminar,text="Regresar",command=ventanaEliminar.destroy).pack(pady=5)
-
 #Funcion 5 del menu principal:
 def insertarLugarDonacion(pLugaresDonacion):
     '''
@@ -314,6 +309,7 @@ def reporteDonantesProvincia(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteDonantesProvincia.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 2 submenu reportes:
@@ -371,6 +367,7 @@ def reporteRangoEdad(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteRangoEdad.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 3 submenu reportes:
@@ -425,6 +422,7 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteTipoSangreProvincia.html")
     print("Reporte creado satisfactoriamente")
 
 
@@ -468,6 +466,7 @@ def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     archivo.write("</table>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteListaCompletaDonadores.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 5 submenu reportes:
@@ -506,6 +505,7 @@ def reporteMujeresONegativo(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteMujeresONegativo.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 6 submenu reportes:
@@ -576,6 +576,7 @@ def reportePuedeDonar(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reportePuedeDonar.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 7 submenu reportes:
@@ -646,6 +647,7 @@ def reportePuedeRecibir(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reportePuedeRecibir.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 8 submenu reportes:
@@ -697,6 +699,7 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteDonantesNoActivos.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 9 submenu reportes:
@@ -743,6 +746,7 @@ def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
     archivo.write("</table>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteLugaresDonacion.html")
     print("Reporte creado satisfactoriamente")
 
 def crearBoton(pVentana,pTexto,pComando):
