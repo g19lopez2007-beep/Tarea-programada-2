@@ -175,7 +175,7 @@ def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
     -Entrada:
         Se recibe la matriz de donadores, la cédula y la justificación ingresada desde tkinter
     -Salida:
-        Se cambia el estado del donador a inactivo o se devuelve un mensaje
+        Se cambia el estado del donador a inactivo sin eliminarlo físicamente
     '''
     validarCedula=validarCedulaAux(pCedula)
     if validarCedula!=True:
@@ -185,9 +185,8 @@ def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
         return "La persona con el número de cédula: "+pCedula+" no está registrada."
     if pJustificacion.strip()=="":
         return "Debe ingresar una justificación"
-    pDonadores[posicion][8]=0
-    pDonadores[posicion][9]=pJustificacion
-    guardarDonadoresAux(pDonadores)
+    justificacionCompleta=obtenerJustificacionAux(pJustificacion)
+    inactivarDonadorAux(posicion,pDonadores,justificacionCompleta)
     return "Donador eliminado satisfactoriamente"
 
 def ventanaEliminarDonador(pDonadores):
