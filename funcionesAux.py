@@ -85,8 +85,14 @@ def validarPesoAux(pPeso):
     -Salida:
         Se devuelve True si el peso es válido o un mensaje indicando el error encontrado
     '''
-    if not re.match("^[0-9]{2,3}$",pPeso):
-        return "El peso minimo debe ser de 2 digitos y maximo de 3 digitos"
+    try:
+        peso=round(float(pPeso),2)
+    except:
+        return "El peso debe ser numérico"
+    if peso<=0:
+        return "El peso debe ser mayor a 0"
+    if peso>650:
+        return "El peso no puede superar los 650kg"
     return True
 
 #Funcion Aux 1 del menu principal:
@@ -245,18 +251,23 @@ def buscarDonadorCedulaAux(pCedula,pDonadores):
     return -1
 
 #Funcion Aux 3 del menu principal:
-def actualizarDatosDonadorAux(pPosicion,pDonadores,pCorreo,pTelefono,pPeso):
+def actualizarDatosDonadorAux(pPosicion,pDonadores,pNombre,pTipoSangre,pSexo,pFechaNacimiento,pPeso,pCorreo,pTelefono,pEstado,pJustificacion):
     '''
     Funcionamiento:
-        Actualiza los datos editables del donador
     -Entrada:
-        Se recibe la posición, matriz, correo, teléfono y peso
+        Se recibe la posición, matriz y los nuevos datos del donador
     -Salida:
         Se actualiza la información del donador
     '''
+    pDonadores[pPosicion][0]=pNombre
+    pDonadores[pPosicion][2]=pTipoSangre
+    pDonadores[pPosicion][3]=pSexo
+    pDonadores[pPosicion][4]=pFechaNacimiento
     pDonadores[pPosicion][5]=pPeso
     pDonadores[pPosicion][6]=pCorreo
     pDonadores[pPosicion][7]=pTelefono
+    pDonadores[pPosicion][8]=pEstado
+    pDonadores[pPosicion][9]=pJustificacion
 
 #Funcion Aux 4 del menu principal:
 def confirmarEliminacionAux(pRespuesta):
@@ -370,9 +381,12 @@ def obtenerFechaTextoAux(pFecha):
     -Entrada:
         Se recibe la fecha del donador
     -Salida:
-        Se devuelve la fecha en formato texto
+        Se devuelve la fecha en formato DD/MM/AAAA
     '''
-    return str(pFecha[0])+"/"+str(pFecha[1])+"/"+str(pFecha[2])
+    dia=str(pFecha[0]).zfill(2)
+    mes=str(pFecha[1]).zfill(2)
+    anno=str(pFecha[2])
+    return dia+"/"+mes+"/"+anno
 
 def iniciarHtmlAux(pArchivo,pTitulo):
     '''
