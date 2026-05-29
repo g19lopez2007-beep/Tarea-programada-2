@@ -8,6 +8,7 @@ import random
 from tkinter import messagebox
 from funcionesAux import *
 from tkinter import *
+import webbrowser
 
 #Funcion para cargar automaticamente los donadores
 def cargarDonadores():
@@ -308,6 +309,7 @@ def reporteDonantesProvincia(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteDonantesProvincia.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 2 submenu reportes:
@@ -365,6 +367,7 @@ def reporteRangoEdad(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteRangoEdad.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 3 submenu reportes:
@@ -419,6 +422,7 @@ def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteTipoSangreProvincia.html")
     print("Reporte creado satisfactoriamente")
 
 
@@ -462,6 +466,7 @@ def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     archivo.write("</table>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteListaCompletaDonadores.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 5 submenu reportes:
@@ -500,6 +505,7 @@ def reporteMujeresONegativo(pDonadores):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteMujeresONegativo.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 6 submenu reportes:
@@ -570,6 +576,7 @@ def reportePuedeDonar(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reportePuedeDonar.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 7 submenu reportes:
@@ -640,6 +647,7 @@ def reportePuedeRecibir(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reportePuedeRecibir.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 8 submenu reportes:
@@ -691,6 +699,7 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
     archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteDonantesNoActivos.html")
     print("Reporte creado satisfactoriamente")
 
 #Funcion 9 submenu reportes:
@@ -737,6 +746,7 @@ def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
     archivo.write("</table>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
+    webbrowser.open("reporteLugaresDonacion.html")
     print("Reporte creado satisfactoriamente")
 
 def crearBoton(pVentana,pTexto,pComando):
