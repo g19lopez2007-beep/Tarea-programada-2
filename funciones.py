@@ -199,30 +199,29 @@ def ventanaEliminarDonador(pDonadores):
     '''
     ventanaEliminar=Toplevel()
     ventanaEliminar.title("Eliminar donador")
-    ventanaEliminar.geometry("400x300")
-    Label(
-        ventanaEliminar,
-        text="ELIMINAR DONADOR",
-        font=("Century Gothic",14,"bold")).pack(pady=10)
-    Label(
-        ventanaEliminar,
-        text="Digite la cédula").pack()
+    ventanaEliminar.geometry("400x350")
+
+    Label(ventanaEliminar,text="ELIMINAR DONADOR",font=("Century Gothic",14,"bold")).pack(pady=10)
+
+    Label(ventanaEliminar,text="Digite la cédula").pack()
     entradaCedula=Entry(ventanaEliminar)
     entradaCedula.pack(pady=5)
-    Label(
-        ventanaEliminar,
-        text="Digite la justificación").pack()
+
+    Label(ventanaEliminar,text="Digite la justificación").pack()
     entradaJustificacion=Entry(ventanaEliminar)
     entradaJustificacion.pack(pady=5)
+
     def confirmarEliminar():
-        respuesta=messagebox.askyesno(
-            "Confirmar eliminación",
-            "¿Desea confirmar la eliminación del donador?")
+        """
+        Funcionamiento:confirma la eliminación del donador y muestra el resultado
+        -Entrada:
+            Se reciben los datos del donador a eliminar
+        -Salida:
+            Se muestra un mensaje con el resultado de la operación
+        """
+        respuesta=messagebox.askyesno("Confirmar eliminación","¿Desea confirmar la eliminación del donador?")
         if respuesta==True:
-            mensaje=eliminarDonadorTk(
-                pDonadores,
-                entradaCedula.get(),
-                entradaJustificacion.get())
+            mensaje=eliminarDonadorTk(pDonadores,entradaCedula.get(),entradaJustificacion.get())
             messagebox.showinfo("Resultado",mensaje)
             if mensaje=="Donador eliminado satisfactoriamente":
                 ventanaEliminar.destroy()
@@ -230,7 +229,6 @@ def ventanaEliminarDonador(pDonadores):
             messagebox.showinfo("Resultado","Donador NO eliminado")
     Button(ventanaEliminar,text="Eliminar",command=confirmarEliminar).pack(pady=10)
     Button(ventanaEliminar,text="Regresar",command=ventanaEliminar.destroy).pack(pady=5)
-
 #Funcion 5 del menu principal:
 def insertarLugarDonacion(pLugaresDonacion):
     '''
