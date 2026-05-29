@@ -200,13 +200,10 @@ def ventanaEliminarDonador(pDonadores):
     ventanaEliminar=Toplevel()
     ventanaEliminar.title("Eliminar donador")
     ventanaEliminar.geometry("400x350")
-
     Label(ventanaEliminar,text="ELIMINAR DONADOR",font=("Century Gothic",14,"bold")).pack(pady=10)
-
     Label(ventanaEliminar,text="Digite la cédula").pack()
     entradaCedula=Entry(ventanaEliminar)
     entradaCedula.pack(pady=5)
-
     Label(ventanaEliminar,text="Digite la justificación").pack()
     entradaJustificacion=Entry(ventanaEliminar)
     entradaJustificacion.pack(pady=5)
