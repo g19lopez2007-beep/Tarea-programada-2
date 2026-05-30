@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 29/5/26
+#Ultima fecha de modificacion: 30/5/26
 #Version de python:3.14
 
 import pickle
@@ -107,32 +107,6 @@ def generarDonadores(pBaseDatos,pTiposSangre,pCorreos,pCantidad):
     guardarDonadoresAux(pBaseDatos)
     return "Se generaron correctamente "+str(cantidad)+" donadores"
 
-#Funcion 4 del menu principal:
-def eliminarDonador(pDonadores):
-    '''
-    Funcionamiento:
-        Busca un donador y cambia su estado
-        a inactivo sin eliminarlo físicamente
-    -Entrada:
-        Se recibe la matriz principal de donadores
-    -Salida:
-        Se actualiza el estado o muestra mensaje
-    '''
-    cedula=input("Digite la cédula del donador: ")
-    posicion=buscarDonadorCedulaAux(cedula,pDonadores)
-    if posicion==-1:
-        print("La persona con el número de cédula:",cedula,"no está registrada.")
-        return pDonadores
-    justificacion=input("Digite la justificación: ")
-    respuesta=input("¿Desea confirmar la eliminación? " "(si/no): ")
-    confirmar=confirmarEliminacionAux(respuesta)
-    if confirmar==True:
-        inactivarDonadorAux(posicion,pDonadores,justificacion)
-        print("Donador eliminado satisfactoriamente")
-    else:
-        print("Donador NO eliminado")
-    return pDonadores
-
 def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
     '''
     Funcionamiento:
@@ -170,11 +144,11 @@ def confirmarEliminarDonadorTk(pVentanaEliminar,pDonadores,pEntradaCedula,pEntra
     respuesta=messagebox.askyesno("Confirmar eliminación","¿Desea confirmar la eliminación del donador?")
     if respuesta==True:
         mensaje=eliminarDonadorTk(pDonadores,pEntradaCedula.get(),pEntradaJustificacion.get())
-        messagebox.showinfo("Resultado",mensaje)
-        if mensaje=="Donador eliminado satisfactoriamente":
+        messagebox.showinfo("Banco de Sangre",mensaje)
+        if mensaje=="Donador eliminado correctamente":
             pVentanaEliminar.destroy()
     else:
-        messagebox.showinfo("Resultado","Donador NO eliminado")
+        messagebox.showinfo("Banco de Sangre","Donador NO eliminado")
 
 def mostrarJustificacionesTk():
     '''
@@ -213,205 +187,6 @@ def ventanaEliminarDonador(pDonadores):
     Button(ventanaEliminar,text="Ver justificaciones",font=("Century Gothic",12,"bold"),width=35,command=mostrarJustificacionesTk).pack(pady=5)
     Button(ventanaEliminar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventanaEliminar.destroy).pack(pady=5)
 
-#Funcion 5 del menu principal:
-def insertarLugarDonacion(pLugaresDonacion):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el diccionario de lugares de donación
-    -Salida:
-        Se agrega un nuevo lugar de donación según la provincia indicada
-    '''
-    print("\nSeleccione una opción\n1.San José\n2.Alajuela\n3.Cartago\n4.Heredia\n5.Guanacaste\n6.Puntarenas\n7.Limón")
-    provincia=input("Digite el número de provincia: ")
-    validarProvincia=validarProvinciaAux(provincia)
-    if validarProvincia!=True:
-        print(validarProvincia)
-        return pLugaresDonacion
-    lugar=input("Digite el nuevo lugar de donación: ").strip()
-    validarLugar=validarLugarDonacionAux(lugar)
-    if validarLugar!=True:
-        print(validarLugar)
-        return pLugaresDonacion
-    validarRepetido=validarLugarRepetidoAux(provincia,lugar,pLugaresDonacion)
-    if validarRepetido!=True:
-        print(validarRepetido)
-        return pLugaresDonacion
-    provincia=int(provincia)
-    if provincia not in pLugaresDonacion:
-        pLugaresDonacion[provincia]=[]
-    pLugaresDonacion[provincia].append(lugar)
-    print("Lugar agregado correctamente")
-    return pLugaresDonacion
-
-#Funcion 1 submenu reportes:
-def reporteDonantesProvincia(pDonadores):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores
-    -Salida:
-        Se genera un reporte HTML con los donadores activos
-        de la provincia indicada
-    '''
-    provincia=input("Digite el número de provincia: ")
-    try:
-        provincia=int(provincia)
-    except:
-        print("La provincia debe ser numérica")
-        return
-    if provincia<1 or provincia>7:
-        print("Provincia inválida")
-        return
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            if donador[8]==1 and int(donador[1][0])==provincia:
-                encontrados+=1
-    if encontrados==0:
-        print("No hay donadores activos en esa provincia")
-        return
-    archivo=open("reporteDonantesProvincia.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte de donantes por provincia")
-    archivo.write("<table border='1'>\n")
-    archivo.write("<tr>")
-    archivo.write("<th>Cédula</th>")
-    archivo.write("<th>Nombre completo</th>")
-    archivo.write("<th>Fecha de nacimiento</th>")
-    archivo.write("<th>Teléfono</th>")
-    archivo.write("<th>Correo</th>")
-    archivo.write("</tr>\n")
-    for donador in pDonadores:
-        if len(donador)>=10:
-            if donador[8]==1 and int(donador[1][0])==provincia:
-                archivo.write("<tr>")
-                archivo.write("<td>"+donador[1]+"</td>")
-                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                archivo.write("<td>"+donador[7]+"</td>")
-                archivo.write("<td>"+donador[6]+"</td>")
-                archivo.write("</tr>\n")
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    webbrowser.open("reporteDonantesProvincia.html")
-    print("Reporte creado satisfactoriamente")
-
-#Funcion 2 submenu reportes:
-def reporteRangoEdad(pDonadores):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores
-    -Salida:
-        Se genera un reporte HTML con los donadores
-        activos que estén dentro del rango de edad indicado
-    '''
-    edadMinima=input("Digite la edad mínima: ")
-    edadMaxima=input("Digite la edad máxima: ")
-    try:
-        edadMinima=int(edadMinima)
-        edadMaxima=int(edadMaxima)
-    except:
-        print("Las edades deben ser numéricas")
-        return
-    if edadMinima<18 or edadMaxima>65:
-        print("Las edades deben estar entre 18 y 65 años")
-        return
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            edad=calcularEdadAux(donador[4])
-            if donador[8]==1 and edad>=edadMinima and edad<=edadMaxima:
-                encontrados+=1
-    if encontrados==0:
-        print("No hay donadores en ese rango de edad")
-        return
-    archivo=open("reporteRangoEdad.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte por rango de edad")
-    archivo.write("<table border='1'>\n")
-    archivo.write("<tr>")
-    archivo.write("<th>Cédula</th>")
-    archivo.write("<th>Nombre completo</th>")
-    archivo.write("<th>Fecha nacimiento</th>")
-    archivo.write("<th>Teléfono</th>")
-    archivo.write("<th>Correo</th>")
-    archivo.write("</tr>\n")
-    for donador in pDonadores:
-        if len(donador)>=10:
-            edad=calcularEdadAux(donador[4])
-            if donador[8]==1 and edad>=edadMinima and edad<=edadMaxima:
-                archivo.write("<tr>")
-                archivo.write("<td>"+donador[1]+"</td>")
-                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                archivo.write("<td>"+donador[7]+"</td>")
-                archivo.write("<td>"+donador[6]+"</td>")
-                archivo.write("</tr>\n")
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    webbrowser.open("reporteRangoEdad.html")
-    print("Reporte creado satisfactoriamente")
-
-#Funcion 3 submenu reportes:
-def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores y la tupla de tipos de sangre
-    -Salida:
-        Se genera un reporte HTML con donadores activos filtrados por tipo de sangre y provincia
-    '''
-    print("\n1.O+\n2.O-\n3.A+\n4.A-\n5.B+\n6.B-\n7.AB+\n8.AB-")
-    tipoSangre=input("Digite el tipo de sangre: ")
-    validarTipoSangre=validarTipoSangreAux(tipoSangre,pTiposSangre)
-    if validarTipoSangre!=True:
-        print(validarTipoSangre)
-        return
-    print("\n1.San José\n2.Alajuela\n3.Cartago\n4.Heredia\n5.Guanacaste\n6.Puntarenas\n7.Limón")
-    provincia=input("Digite el número de provincia: ")
-    validarProvincia=validarProvinciaAux(provincia)
-    if validarProvincia!=True:
-        print(validarProvincia)
-        return
-    tipoSangre=int(tipoSangre)-1
-    provincia=int(provincia)
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            provinciaCedula=int(donador[1][0])
-            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
-                encontrados+=1
-    if encontrados==0:
-        print("No hay donadores que cumplan con los requisitos")
-        return
-    archivo=open("reporteTipoSangreProvincia.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte por tipo de sangre de una provincia dada")
-    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
-    encontrados=0
-    for donador in pDonadores:
-        if len(donador)>=10:
-            provinciaCedula=int(donador[1][0])
-            if donador[8]==1 and donador[2]==tipoSangre and provinciaCedula==provincia:
-                archivo.write("<tr>")
-                archivo.write("<td>"+donador[1]+"</td>")
-                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                archivo.write("<td>"+donador[7]+"</td>")
-                archivo.write("<td>"+donador[6]+"</td>")
-                archivo.write("</tr>\n")
-                encontrados+=1
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    webbrowser.open("reporteTipoSangreProvincia.html")
-    print("Reporte creado satisfactoriamente")
-
-
 #Funcion 4 submenu reportes:
 def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     '''
@@ -429,7 +204,7 @@ def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
                 if provinciaCedula==provincia:
                     encontrados+=1
     if encontrados==0:
-        print("No hay donadores que cumplan con los requisitos")
+        messagebox.showinfo("Banco de Sangre","No hay donadores que cumplan con los requisitos")
         return
     archivo=open("reporteListaCompletaDonadores.html","w",encoding="utf-8")
     iniciarHtmlAux(archivo,"Lista completa de donadores")
@@ -453,7 +228,7 @@ def reporteListaCompletaDonadores(pDonadores,pTiposSangre):
     finalizarHtmlAux(archivo)
     archivo.close()
     webbrowser.open("reporteListaCompletaDonadores.html")
-    print("Reporte creado satisfactoriamente")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
 
 #Funcion 5 submenu reportes:
 def reporteMujeresONegativo(pDonadores):
@@ -462,179 +237,44 @@ def reporteMujeresONegativo(pDonadores):
     -Entrada:
         Se recibe la matriz de donadores
     -Salida:
-        Se genera un reporte HTML con mujeres donantes O- menores de 45 años
+        Se genera un reporte HTML con mujeres donantes O- menores de 45 años, ordenadas por edad
     '''
-    encontrados=0
+    lista=[]
     for donador in pDonadores:
         if len(donador)>=10:
             edad=calcularEdadAux(donador[4])
             if donador[8]==1 and donador[3]==False and donador[2]==1 and edad<45:
-                encontrados+=1
-    if encontrados==0:
-        print("No hay donadores que cumplan con los requisitos")
+                lista.append(donador)
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","No hay donadores que cumplan con los requisitos")
         return
+    i=0
+    while i<len(lista)-1:
+        j=0
+        while j<len(lista)-1-i:
+            if calcularEdadAux(lista[j][4])<calcularEdadAux(lista[j+1][4]):
+                aux=lista[j]
+                lista[j]=lista[j+1]
+                lista[j+1]=aux
+            j+=1
+        i+=1
     archivo=open("reporteMujeresONegativo.html","w",encoding="utf-8")
     iniciarHtmlAux(archivo,"Mujeres donantes O- menores de 45 años")
     archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
-    for donador in pDonadores:
-        if len(donador)>=10:
-            edad=calcularEdadAux(donador[4])
-            if donador[8]==1 and donador[3]==False and donador[2]==1 and edad<45:
-                archivo.write("<tr>")
-                archivo.write("<td>"+donador[1]+"</td>")
-                archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
-                archivo.write("<td>"+donador[7]+"</td>")
-                archivo.write("<td>"+donador[6]+"</td>")
-                archivo.write("</tr>\n")
+    for donador in lista:
+        archivo.write("<tr>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
     archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
     finalizarHtmlAux(archivo)
     archivo.close()
     webbrowser.open("reporteMujeresONegativo.html")
-    print("Reporte creado satisfactoriamente")
-
-#Funcion 6 submenu reportes:
-def reportePuedeDonar(pDonadores,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores y la tupla de tipos de sangre
-    -Salida:
-        Se genera un reporte HTML con las personas a quienes puede donar
-        el tipo de sangre seleccionado, agrupadas por provincia ascendentemente
-    '''
-    print("\nTipos de sangre")
-    i=0
-    while i<len(pTiposSangre):
-        print(str(i)+".",pTiposSangre[i])
-        i+=1
-    tipo=input("Digite el número del tipo de sangre: ")
-    try:
-        tipo=int(tipo)
-    except:
-        print("El tipo de sangre debe ser numérico")
-        return
-    if tipo<0 or tipo>=len(pTiposSangre):
-        print("Tipo de sangre inválido")
-        return
-    tipoDonante=obtenerTipoSangreTextoAux(tipo,pTiposSangre)
-    encontrados=0
-    provincia=1
-    while provincia<=7:
-        for donador in pDonadores:
-            if len(donador)>=10:
-                tipoReceptor=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
-                if donador[8]==1 and int(donador[1][0])==provincia and puedeDonarAux(tipoDonante,tipoReceptor)==True:
-                    encontrados+=1
-        provincia+=1
-    if encontrados==0:
-        print("No hay donadores compatibles registrados")
-        return
-    archivo=open("reportePuedeDonar.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte de a quién puede donar")
-    archivo.write("<p>Tipo de sangre seleccionado: "+tipoDonante+"</p>\n")
-    archivo.write("<table border='1'>\n")
-    archivo.write("<tr>")
-    archivo.write("<th>Provincia</th>")
-    archivo.write("<th>Cédula</th>")
-    archivo.write("<th>Nombre completo</th>")
-    archivo.write("<th>Tipo de sangre</th>")
-    archivo.write("<th>Teléfono</th>")
-    archivo.write("<th>Correo</th>")
-    archivo.write("</tr>\n")
-    provincia=1
-    while provincia<=7:
-        for donador in pDonadores:
-            if len(donador)>=10:
-                tipoReceptor=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
-                if donador[8]==1 and int(donador[1][0])==provincia and puedeDonarAux(tipoDonante,tipoReceptor)==True:
-                    archivo.write("<tr>")
-                    archivo.write("<td>"+str(provincia)+"</td>")
-                    archivo.write("<td>"+donador[1]+"</td>")
-                    archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                    archivo.write("<td>"+tipoReceptor+"</td>")
-                    archivo.write("<td>"+donador[7]+"</td>")
-                    archivo.write("<td>"+donador[6]+"</td>")
-                    archivo.write("</tr>\n")
-        provincia+=1
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    webbrowser.open("reportePuedeDonar.html")
-    print("Reporte creado satisfactoriamente")
-
-#Funcion 7 submenu reportes:
-def reportePuedeRecibir(pDonadores,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la matriz de donadores y la tupla de tipos de sangre
-    -Salida:
-        Se genera un reporte HTML con los donadores de quienes puede recibir
-        el tipo de sangre seleccionado, agrupados por provincia descendentemente
-    '''
-    print("\nTipos de sangre")
-    i=0
-    while i<len(pTiposSangre):
-        print(str(i)+".",pTiposSangre[i])
-        i+=1
-    tipo=input("Digite el número del tipo de sangre: ")
-    try:
-        tipo=int(tipo)
-    except:
-        print("El tipo de sangre debe ser numérico")
-        return
-    if tipo<0 or tipo>=len(pTiposSangre):
-        print("Tipo de sangre inválido")
-        return
-    tipoReceptor=obtenerTipoSangreTextoAux(tipo,pTiposSangre)
-    encontrados=0
-    provincia=7
-    while provincia>=1:
-        for donador in pDonadores:
-            if len(donador)>=10:
-                tipoDonante=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
-                if donador[8]==1 and int(donador[1][0])==provincia and puedeRecibirAux(tipoReceptor,tipoDonante)==True:
-                    encontrados+=1
-        provincia-=1
-    if encontrados==0:
-        print("No hay donadores compatibles registrados")
-        return
-    archivo=open("reportePuedeRecibir.html","w",encoding="utf-8")
-    iniciarHtmlAux(archivo,"Reporte de quién puede recibir")
-    archivo.write("<p>Tipo de sangre seleccionado: "+tipoReceptor+"</p>\n")
-    archivo.write("<table border='1'>\n")
-    archivo.write("<tr>")
-    archivo.write("<th>Provincia</th>")
-    archivo.write("<th>Cédula</th>")
-    archivo.write("<th>Nombre completo</th>")
-    archivo.write("<th>Tipo de sangre</th>")
-    archivo.write("<th>Teléfono</th>")
-    archivo.write("<th>Correo</th>")
-    archivo.write("</tr>\n")
-    provincia=7
-    while provincia>=1:
-        for donador in pDonadores:
-            if len(donador)>=10:
-                tipoDonante=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
-                if donador[8]==1 and int(donador[1][0])==provincia and puedeRecibirAux(tipoReceptor,tipoDonante)==True:
-                    archivo.write("<tr>")
-                    archivo.write("<td>"+str(provincia)+"</td>")
-                    archivo.write("<td>"+donador[1]+"</td>")
-                    archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
-                    archivo.write("<td>"+tipoDonante+"</td>")
-                    archivo.write("<td>"+donador[7]+"</td>")
-                    archivo.write("<td>"+donador[6]+"</td>")
-                    archivo.write("</tr>\n")
-        provincia-=1
-    archivo.write("</table>\n")
-    archivo.write("<p>Total encontrados: "+str(encontrados)+"</p>\n")
-    finalizarHtmlAux(archivo)
-    archivo.close()
-    webbrowser.open("reportePuedeRecibir.html")
-    print("Reporte creado satisfactoriamente")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
 
 #Funcion 8 submenu reportes:
 def reporteDonantesNoActivos(pDonadores,pTiposSangre):
@@ -651,7 +291,7 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
             if donador[8]==0:
                 encontrados+=1
     if encontrados==0:
-        print("No hay donadores no activos registrados")
+        messagebox.showinfo("Banco de Sangre","No hay donadores no activos registrados")
         return
     archivo=open("reporteDonantesNoActivos.html","w",encoding="utf-8")
     iniciarHtmlAux(archivo,"Reporte de donantes NO activos")
@@ -686,7 +326,7 @@ def reporteDonantesNoActivos(pDonadores,pTiposSangre):
     finalizarHtmlAux(archivo)
     archivo.close()
     webbrowser.open("reporteDonantesNoActivos.html")
-    print("Reporte creado satisfactoriamente")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
 
 #Funcion 9 submenu reportes:
 def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
@@ -733,7 +373,7 @@ def reporteLugaresDonacion(pDonadores,pLugaresDonacion):
     finalizarHtmlAux(archivo)
     archivo.close()
     webbrowser.open("reporteLugaresDonacion.html")
-    print("Reporte creado satisfactoriamente")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
 
 def crearBoton(pVentana,pTexto,pComando):
     '''
@@ -747,17 +387,6 @@ def crearBoton(pVentana,pTexto,pComando):
     boton.pack(pady=5)
     return boton
 
-def mostrarMensaje(pTexto):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el texto que se desea mostrar
-    -Salida:
-        Se muestra una ventana pequeña con el mensaje indicado
-    '''
-    ventanaMensaje=Toplevel()
-    ventanaMensaje.title("Mensaje")
-    Label(ventanaMensaje,text=pTexto,font=("Century Gothic",14)).pack(padx=20,pady=20)
 
 def regresarMenuPrincipal(pVentanaPrincipal,pVentanaActual):
     '''
@@ -783,12 +412,14 @@ def registrarDonadorTk(pVentanaPrincipal,pVentanaInsertar,pDonadores,pNombre,pAp
         if pTiposSangre[i]==pTipoSangre.get():
             tipoSangre=str(i+1)
     mensaje=insertarDonador(pDonadores,pNombre.get(),pApellido1.get(),pApellido2.get(),pCedula.get(),tipoSangre,pFecha.get(),pSexo.get(),pCorreo.get(),pTelefono.get(),pPeso.get())
-    mostrarMensaje(mensaje)
     if "Donador registrado correctamente" in mensaje:
         pBoton3.config(state="normal")
         pBoton4.config(state="normal")
         pBoton6.config(state="normal")
+        messagebox.showinfo("Banco de Sangre",mensaje)
         regresarMenuPrincipal(pVentanaPrincipal,pVentanaInsertar)
+    else:
+        messagebox.showinfo("Error",mensaje)
 
 def limpiarInsertarDonadorTk(pNombre,pApellido1,pApellido2,pCedula,pTipoSangre,pFecha,pSexo,pCorreo,pTelefono,pPeso):
     '''
@@ -869,12 +500,14 @@ def generarDonadoresTk(pVentanaPrincipal,pVentanaGenerar,pDonadores,pTiposSangre
         Se generan donadores y se muestra el mensaje correspondiente
     '''
     mensaje=generarDonadores(pDonadores,pTiposSangre,pCorreos,pCantidad.get())
-    mostrarMensaje(mensaje)
     if "Se generaron correctamente" in mensaje:
         pBoton3.config(state="normal")
         pBoton4.config(state="normal")
         pBoton6.config(state="normal")
+        messagebox.showinfo("Banco de Sangre",mensaje)
         regresarMenuPrincipal(pVentanaPrincipal,pVentanaGenerar)
+    else:
+        messagebox.showinfo("Error",mensaje)
 
 def abrirGenerarDonadores(pVentana,pDonadores,pTiposSangre,pCorreos,pBoton3,pBoton4,pBoton6):
     '''
@@ -955,13 +588,13 @@ def confirmarActualizarDonadorTk(pVentanaPrincipal,pVentanaActualizar,pDonadores
             tipoSangre=str(i+1)
     mensaje=actualizarDonadorTk(pDonadores,pPosicion,pNombre.get(),pApellido1.get(),pApellido2.get(),tipoSangre,pTiposSangre,pFecha.get(),pSexo.get(),pCorreo.get(),pTelefono.get(),pPeso.get())
     if mensaje!="Datos actualizados correctamente":
-        messagebox.showinfo("Resultado",mensaje)
+        messagebox.showinfo("Banco de Sangre",mensaje)
         return
     respuesta=messagebox.askyesno("Confirmar actualización","¿Desea actualizar los datos del donador?")
     if respuesta==False:
-        messagebox.showinfo("Resultado","Datos No actualizados.")
+        messagebox.showinfo("Banco de Sangre","Datos No actualizados.")
         return
-    messagebox.showinfo("Resultado",mensaje)
+    messagebox.showinfo("Banco de Sangre",mensaje)
     regresarMenuPrincipal(pVentanaPrincipal,pVentanaActualizar)
 
 def abrirFormularioActualizarDonador(pVentanaPrincipal,pVentanaBuscar,pDonadores,pPosicion,pTiposSangre):
@@ -1038,11 +671,11 @@ def buscarActualizarDonadorTk(pVentanaPrincipal,pVentanaBuscar,pDonadores,pCedul
     cedula=pCedula.get()
     validarCedula=validarCedulaAux(cedula)
     if validarCedula!=True:
-        messagebox.showinfo("Resultado",validarCedula)
+        messagebox.showinfo("Banco de Sangre",validarCedula)
         return
     posicion=buscarDonadorCedulaAux(cedula,pDonadores)
     if posicion==-1:
-        messagebox.showinfo("Resultado","La persona con el número de cédula: "+cedula+" no está registrada en la base de datos del Banco de Sangre aún.")
+        messagebox.showinfo("Banco de Sangre","La persona con el número de cédula: "+cedula+" no está registrada en la base de datos del Banco de Sangre aún.")
         return
     abrirFormularioActualizarDonador(pVentanaPrincipal,pVentanaBuscar,pDonadores,posicion,pTiposSangre)
 
@@ -1114,7 +747,7 @@ def confirmarInsertarLugarDonacionTk(pVentanaPrincipal,pVentanaLugar,pLugaresDon
     elif pProvincia.get()=="Limón":
         provincia="7"
     mensaje=insertarLugarDonacionTk(pLugaresDonacion,provincia,pLugar.get("1.0",END))
-    messagebox.showinfo("Resultado",mensaje)
+    messagebox.showinfo("Banco de Sangre",mensaje)
     if mensaje=="Lugar agregado correctamente":
         regresarMenuPrincipal(pVentanaPrincipal,pVentanaLugar)
 
@@ -1140,3 +773,358 @@ def abrirInsertarLugarDonacion(pVentana,pLugaresDonacion):
     lugar.pack(pady=5)
     Button(ventanaLugar,text="Insertar",font=("Century Gothic",12,"bold"),width=35,command=lambda:confirmarInsertarLugarDonacionTk(pVentana,ventanaLugar,pLugaresDonacion,provincia,lugar)).pack(pady=5)
     Button(ventanaLugar,text="Salir",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaLugar)).pack(pady=5)
+
+def reporteDonantesProvincia(pDonadores):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores
+    -Salida:
+        Se muestra ventana Tkinter para seleccionar provincia y generar reporte HTML
+    '''
+    ventana=Toplevel()
+    ventana.title("Donantes por provincia")
+    ventana.geometry("500x250")
+    Label(ventana,text="DONANTES POR PROVINCIA",font=("Century Gothic",14,"bold")).pack(pady=15)
+    Label(ventana,text="Provincia:",font=("Century Gothic",12)).pack()
+    provincia=StringVar()
+    provincia.set("San José")
+    OptionMenu(ventana,provincia,"San José","Alajuela","Cartago","Heredia","Guanacaste","Puntarenas","Limón").pack(pady=5)
+    Button(ventana,text="Generar reporte",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarReporteDonantesProvincia(ventana,pDonadores,provincia)).pack(pady=5)
+    Button(ventana,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventana.destroy).pack(pady=5)
+
+def generarReporteDonantesProvincia(pVentana,pDonadores,pProvincia):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, la matriz de donadores y la provincia seleccionada
+    -Salida:
+        Se genera el reporte HTML con los donadores activos de esa provincia, ordenados por nombre
+    '''
+    nombresProvincia={"San José":1,"Alajuela":2,"Cartago":3,"Heredia":4,"Guanacaste":5,"Puntarenas":6,"Limón":7}
+    numeroProvincia=nombresProvincia[pProvincia.get()]
+    lista=[]
+    for donador in pDonadores:
+        if len(donador)>=10:
+            if donador[8]==1 and int(donador[1][0])==numeroProvincia:
+                lista.append(donador)
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","Reporte no creado.")
+        return
+    i=0
+    while i<len(lista)-1:
+        j=0
+        while j<len(lista)-1-i:
+            if obtenerNombreCompletoAux(lista[j][0])>obtenerNombreCompletoAux(lista[j+1][0]):
+                aux=lista[j]
+                lista[j]=lista[j+1]
+                lista[j+1]=aux
+            j+=1
+        i+=1
+    archivo=open("reporteDonantesProvincia.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte de donantes por provincia: "+pProvincia.get())
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for donador in lista:
+        archivo.write("<tr>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    webbrowser.open("reporteDonantesProvincia.html")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
+    pVentana.destroy()
+
+#Funcion 2 submenu reportes:
+def reporteRangoEdad(pDonadores):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores
+    -Salida:
+        Se muestra ventana Tkinter para ingresar rango de edad y generar reporte HTML
+    '''
+    ventana=Toplevel()
+    ventana.title("Por rango de edad")
+    ventana.geometry("500x300")
+    Label(ventana,text="POR RANGO DE EDAD",font=("Century Gothic",14,"bold")).pack(pady=15)
+    frame=Frame(ventana)
+    frame.pack()
+    Label(frame,text="Edad inicial (18-65):",font=("Century Gothic",12)).grid(row=0,column=0,pady=5,sticky="w")
+    edadInicial=Entry(frame,font=("Century Gothic",12))
+    edadInicial.grid(row=0,column=1,pady=5)
+    Label(frame,text="Edad final (18-65):",font=("Century Gothic",12)).grid(row=1,column=0,pady=5,sticky="w")
+    edadFinal=Entry(frame,font=("Century Gothic",12),state="disabled")
+    edadFinal.grid(row=1,column=1,pady=5)
+    def activarEdadFinal(event):
+        try:
+            val=int(edadInicial.get())
+            if 18<=val<=65:
+                edadFinal.config(state="normal")
+            else:
+                edadFinal.config(state="disabled")
+                edadFinal.delete(0,END)
+        except:
+            edadFinal.config(state="disabled")
+            edadFinal.delete(0,END)
+    edadInicial.bind("<KeyRelease>",activarEdadFinal)
+    Button(ventana,text="Generar reporte",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarReporteRangoEdad(ventana,pDonadores,edadInicial,edadFinal)).pack(pady=5)
+    Button(ventana,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventana.destroy).pack(pady=5)
+
+def generarReporteRangoEdad(pVentana,pDonadores,pEdadInicial,pEdadFinal):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, la matriz de donadores y las entradas de edad
+    -Salida:
+        Se genera el reporte HTML con donadores activos en el rango de edad indicado
+    '''
+    try:
+        edadMinima=int(pEdadInicial.get())
+    except:
+        messagebox.showinfo("Banco de Sangre","La edad inicial debe ser numérica")
+        return
+    if edadMinima<18 or edadMinima>65:
+        messagebox.showinfo("Banco de Sangre","La edad inicial debe estar entre 18 y 65 años")
+        return
+    edadMaxima=edadMinima
+    if pEdadFinal.get().strip()!="":
+        try:
+            edadMaxima=int(pEdadFinal.get())
+        except:
+            messagebox.showinfo("Banco de Sangre","La edad final debe ser numérica")
+            return
+        if edadMaxima<18 or edadMaxima>65:
+            messagebox.showinfo("Banco de Sangre","La edad final debe estar entre 18 y 65 años")
+            return
+        if edadMaxima<edadMinima:
+            messagebox.showinfo("Banco de Sangre","La edad final no puede ser menor a la edad inicial")
+            return
+    lista=[]
+    for donador in pDonadores:
+        if len(donador)>=10:
+            edad=calcularEdadAux(donador[4])
+            if donador[8]==1 and edad>=edadMinima and edad<=edadMaxima:
+                lista.append(donador)
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","Reporte no creado.")
+        return
+    archivo=open("reporteRangoEdad.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte por rango de edad")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for donador in lista:
+        archivo.write("<tr>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    webbrowser.open("reporteRangoEdad.html")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
+    pVentana.destroy()
+
+#Funcion 3 submenu reportes:
+def reporteTipoSangreProvincia(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se muestra ventana Tkinter para seleccionar tipo de sangre y provincia, y generar reporte HTML
+    '''
+    ventana=Toplevel()
+    ventana.title("Por tipo de sangre de una provincia")
+    ventana.geometry("500x300")
+    Label(ventana,text="POR TIPO DE SANGRE DE UNA PROVINCIA",font=("Century Gothic",12,"bold")).pack(pady=15)
+    Label(ventana,text="Tipo de sangre:",font=("Century Gothic",12)).pack()
+    tipoSangre=StringVar()
+    tipoSangre.set(pTiposSangre[0])
+    OptionMenu(ventana,tipoSangre,*pTiposSangre).pack(pady=5)
+    Label(ventana,text="Provincia:",font=("Century Gothic",12)).pack()
+    provincia=StringVar()
+    provincia.set("San José")
+    OptionMenu(ventana,provincia,"San José","Alajuela","Cartago","Heredia","Guanacaste","Puntarenas","Limón").pack(pady=5)
+    Button(ventana,text="Generar reporte",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarReporteTipoSangreProvincia(ventana,pDonadores,pTiposSangre,tipoSangre,provincia)).pack(pady=5)
+    Button(ventana,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventana.destroy).pack(pady=5)
+
+def generarReporteTipoSangreProvincia(pVentana,pDonadores,pTiposSangre,pTipoSangre,pProvincia):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, la matriz, los tipos de sangre, el tipo seleccionado y la provincia seleccionada
+    -Salida:
+        Se genera el reporte HTML filtrado por tipo de sangre y provincia
+    '''
+    nombresProvincia={"San José":1,"Alajuela":2,"Cartago":3,"Heredia":4,"Guanacaste":5,"Puntarenas":6,"Limón":7}
+    numeroProvincia=nombresProvincia[pProvincia.get()]
+    indice=0
+    for i in range(len(pTiposSangre)):
+        if pTiposSangre[i]==pTipoSangre.get():
+            indice=i
+    lista=[]
+    for donador in pDonadores:
+        if len(donador)>=10:
+            provinciaCedula=int(donador[1][0])
+            if donador[8]==1 and donador[2]==indice and provinciaCedula==numeroProvincia:
+                lista.append(donador)
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","Reporte no creado.")
+        return
+    archivo=open("reporteTipoSangreProvincia.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte por tipo de sangre de una provincia dada")
+    archivo.write("<table border='1'>\n<tr><th>Cédula</th><th>Nombre completo</th><th>Fecha de nacimiento</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for donador in lista:
+        archivo.write("<tr>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+obtenerFechaTextoAux(donador[4])+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    webbrowser.open("reporteTipoSangreProvincia.html")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
+    pVentana.destroy()
+
+#Funcion 6 submenu reportes:
+def reportePuedeDonar(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se muestra ventana Tkinter para seleccionar tipo de sangre y generar reporte HTML
+    '''
+    ventana=Toplevel()
+    ventana.title("¿A quién puede donar?")
+    ventana.geometry("500x250")
+    Label(ventana,text="¿A QUIÉN PUEDE DONAR?",font=("Century Gothic",14,"bold")).pack(pady=15)
+    Label(ventana,text="Tipo de sangre:",font=("Century Gothic",12)).pack()
+    tipoSangre=StringVar()
+    tipoSangre.set(pTiposSangre[0])
+    OptionMenu(ventana,tipoSangre,*pTiposSangre).pack(pady=5)
+    Button(ventana,text="Generar reporte",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarReportePuedeDonar(ventana,pDonadores,pTiposSangre,tipoSangre)).pack(pady=5)
+    Button(ventana,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventana.destroy).pack(pady=5)
+
+def generarReportePuedeDonar(pVentana,pDonadores,pTiposSangre,pTipoSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, la matriz, los tipos de sangre y el tipo seleccionado
+    -Salida:
+        Se genera el reporte HTML agrupado por provincia ascendentemente
+    '''
+    tipoDonante=pTipoSangre.get()
+    lista=[]
+    provincia=1
+    while provincia<=7:
+        for donador in pDonadores:
+            if len(donador)>=10:
+                tipoReceptor=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
+                if donador[8]==1 and int(donador[1][0])==provincia and puedeDonarAux(tipoDonante,tipoReceptor)==True:
+                    lista.append((provincia,donador))
+        provincia+=1
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","Reporte no creado.")
+        return
+    archivo=open("reportePuedeDonar.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte de a quién puede donar")
+    archivo.write("<p>Tipo de sangre seleccionado: "+tipoDonante+"</p>\n")
+    archivo.write("<table border='1'>\n<tr><th>Provincia</th><th>Cédula</th><th>Nombre completo</th><th>Tipo de sangre</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for entrada in lista:
+        prov=entrada[0]
+        donador=entrada[1]
+        tipoReceptor=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
+        archivo.write("<tr>")
+        archivo.write("<td>"+obtenerProvinciaTextoAux(prov)+"</td>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+tipoReceptor+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    webbrowser.open("reportePuedeDonar.html")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
+    pVentana.destroy()
+
+#Funcion 7 submenu reportes:
+def reportePuedeRecibir(pDonadores,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la matriz de donadores y la tupla de tipos de sangre
+    -Salida:
+        Se muestra ventana Tkinter para seleccionar tipo de sangre y generar reporte HTML
+    '''
+    ventana=Toplevel()
+    ventana.title("¿De quién puede recibir?")
+    ventana.geometry("500x250")
+    Label(ventana,text="¿DE QUIÉN PUEDE RECIBIR?",font=("Century Gothic",14,"bold")).pack(pady=15)
+    Label(ventana,text="Tipo de sangre:",font=("Century Gothic",12)).pack()
+    tipoSangre=StringVar()
+    tipoSangre.set(pTiposSangre[0])
+    OptionMenu(ventana,tipoSangre,*pTiposSangre).pack(pady=5)
+    Button(ventana,text="Generar reporte",font=("Century Gothic",12,"bold"),width=35,command=lambda:generarReportePuedeRecibir(ventana,pDonadores,pTiposSangre,tipoSangre)).pack(pady=5)
+    Button(ventana,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventana.destroy).pack(pady=5)
+
+def generarReportePuedeRecibir(pVentana,pDonadores,pTiposSangre,pTipoSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana, la matriz, los tipos de sangre y el tipo seleccionado
+    -Salida:
+        Se genera el reporte HTML agrupado por provincia descendentemente
+    '''
+    tipoReceptor=pTipoSangre.get()
+    lista=[]
+    provincia=7
+    while provincia>=1:
+        for donador in pDonadores:
+            if len(donador)>=10:
+                tipoDonante=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
+                if donador[8]==1 and int(donador[1][0])==provincia and puedeRecibirAux(tipoReceptor,tipoDonante)==True:
+                    lista.append((provincia,donador))
+        provincia-=1
+    if len(lista)==0:
+        messagebox.showinfo("Banco de Sangre","Reporte no creado.")
+        return
+    archivo=open("reportePuedeRecibir.html","w",encoding="utf-8")
+    iniciarHtmlAux(archivo,"Reporte de quién puede recibir")
+    archivo.write("<p>Tipo de sangre seleccionado: "+tipoReceptor+"</p>\n")
+    archivo.write("<table border='1'>\n<tr><th>Provincia</th><th>Cédula</th><th>Nombre completo</th><th>Tipo de sangre</th><th>Teléfono</th><th>Correo</th></tr>\n")
+    for entrada in lista:
+        prov=entrada[0]
+        donador=entrada[1]
+        tipoDonante=obtenerTipoSangreTextoAux(donador[2],pTiposSangre)
+        archivo.write("<tr>")
+        archivo.write("<td>"+obtenerProvinciaTextoAux(prov)+"</td>")
+        archivo.write("<td>"+donador[1]+"</td>")
+        archivo.write("<td>"+obtenerNombreCompletoAux(donador[0])+"</td>")
+        archivo.write("<td>"+tipoDonante+"</td>")
+        archivo.write("<td>"+donador[7]+"</td>")
+        archivo.write("<td>"+donador[6]+"</td>")
+        archivo.write("</tr>\n")
+    archivo.write("</table>\n")
+    archivo.write("<p>Total encontrados: "+str(len(lista))+"</p>\n")
+    finalizarHtmlAux(archivo)
+    archivo.close()
+    webbrowser.open("reportePuedeRecibir.html")
+    messagebox.showinfo("Banco de Sangre","Reporte creado satisfactoriamente")
+    pVentana.destroy()

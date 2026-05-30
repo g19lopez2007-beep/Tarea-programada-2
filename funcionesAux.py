@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 29/5/26
+#Ultima fecha de modificacion: 30/5/26
 #Version de python:3.14
 
 import re
@@ -108,19 +108,6 @@ def guardarDonadoresAux(pDonadores):
     pickle.dump(pDonadores,archivo)
     archivo.close()
 
-def validarEdadDonadorAux(pFechaNacimiento):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe la fecha de nacimiento del donador
-    -Salida:
-        Se devuelve True si el donador cumple con la edad mínima o False si no cumple
-    '''
-    edad=calcularEdadAux(pFechaNacimiento)
-    if edad>=18:
-        return True
-    return False
-
 def validarPesoDonadorAux(pPeso):
     '''
     Funcionamiento:
@@ -142,7 +129,8 @@ def obtenerJustificacionEstadoAux(pFechaNacimiento,pPeso):
     -Salida:
         Se devuelve la justificación correspondiente si el donador queda inactivo
     '''
-    if validarEdadDonadorAux(pFechaNacimiento)==False:
+    edad=calcularEdadAux(pFechaNacimiento)
+    if edad<18:
         return "Menor de edad"
     if validarPesoDonadorAux(pPeso)==False:
         peso=float(pPeso)
@@ -268,23 +256,6 @@ def actualizarDatosDonadorAux(pPosicion,pDonadores,pNombre,pTipoSangre,pSexo,pFe
     pDonadores[pPosicion][7]=pTelefono
     pDonadores[pPosicion][8]=pEstado
     pDonadores[pPosicion][9]=pJustificacion
-
-#Funcion Aux 4 del menu principal:
-def confirmarEliminacionAux(pRespuesta):
-    '''
-    Funcionamiento:
-        Valida si el usuario confirmó la eliminación
-    -Entrada:
-        Se recibe la respuesta del usuario
-    -Salida:
-        Se devuelve True o False
-    '''
-    pRespuesta=pRespuesta.lower().strip()
-    if pRespuesta=="si":
-        return True
-    if pRespuesta=="sí":
-        return True
-    return False
 
 #Funcion Aux 4 del menu principal:
 def inactivarDonadorAux(pPosicion,pDonadores,pJustificacion):
