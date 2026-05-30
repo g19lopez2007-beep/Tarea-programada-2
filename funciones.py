@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 27/5/26
+#Ultima fecha de modificacion: 29/5/26
 #Version de python:3.14
 
 import pickle
@@ -107,43 +107,6 @@ def generarDonadores(pBaseDatos,pTiposSangre,pCorreos,pCantidad):
     guardarDonadoresAux(pBaseDatos)
     return "Se generaron correctamente "+str(cantidad)+" donadores"
 
-#Funcion 3 del menu principal:
-def actualizarDonador(pDonadores):
-    '''
-    Funcionamiento:
-        Busca un donador por cédula y permite actualizar
-        sus datos editables
-    -Entrada:
-        Se recibe la matriz principal de donadores
-    -Salida:
-        Se actualiza la información o se muestra mensaje
-    '''
-    cedula=input("Digite la cédula del donador: ")
-    posicion=buscarDonadorCedulaAux(cedula,pDonadores)
-    if posicion==-1:
-        print("La persona con el número de cédula:",cedula,"no está registrada.")
-        return pDonadores
-    correo=input("Digite el nuevo correo: ")
-    validarCorreo=validarCorreoAux(correo)
-    if validarCorreo!=True:
-        print(validarCorreo)
-        return pDonadores
-    telefono=input("Digite el nuevo teléfono: ")
-    validarTelefono=validarTelefonoAux(telefono)
-    if validarTelefono!=True:
-        print(validarTelefono)
-        return pDonadores
-    peso=input("Digite el nuevo peso: ")
-    validarPeso=validarPesoAux(peso)
-    if validarPeso!=True:
-        print(validarPeso)
-        return pDonadores
-    peso=float(peso)
-    actualizarDatosDonadorAux(posicion,pDonadores,correo,telefono,peso)
-    guardarDonadoresAux(pDonadores)
-    print("Donador actualizado satisfactoriamente")
-    return pDonadores
-
 #Funcion 4 del menu principal:
 def eliminarDonador(pDonadores):
     '''
@@ -186,9 +149,47 @@ def eliminarDonadorTk(pDonadores,pCedula,pJustificacion):
         return "La persona con el número de cédula: "+pCedula+" no está registrada."
     if pJustificacion.strip()=="":
         return "Debe ingresar una justificación"
-    justificacionCompleta=obtenerJustificacionAux(pJustificacion)
+    try:
+        justificacion=int(pJustificacion)
+    except:
+        return "La justificación debe ser un número del 1 al 7"
+    if justificacion<1 or justificacion>7:
+        return "La justificación debe ser un número del 1 al 7"
+    justificacionCompleta=obtenerJustificacionAux(justificacion)
     inactivarDonadorAux(posicion,pDonadores,justificacionCompleta)
-    return "Donador eliminado satisfactoriamente"
+    return "Donador eliminado correctamente"
+
+def confirmarEliminarDonadorTk(pVentanaEliminar,pDonadores,pEntradaCedula,pEntradaJustificacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana de eliminar, la matriz de donadores, la cédula y la justificación
+    -Salida:
+        Se confirma la eliminación del donador y se muestra el resultado
+    '''
+    respuesta=messagebox.askyesno("Confirmar eliminación","¿Desea confirmar la eliminación del donador?")
+    if respuesta==True:
+        mensaje=eliminarDonadorTk(pDonadores,pEntradaCedula.get(),pEntradaJustificacion.get())
+        messagebox.showinfo("Resultado",mensaje)
+        if mensaje=="Donador eliminado satisfactoriamente":
+            pVentanaEliminar.destroy()
+    else:
+        messagebox.showinfo("Resultado","Donador NO eliminado")
+
+def mostrarJustificacionesTk():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se muestran las justificaciones disponibles para eliminar un donador
+    '''
+    ventanaJustificaciones=Toplevel()
+    ventanaJustificaciones.title("Justificaciones")
+    ventanaJustificaciones.geometry("700x350")
+    texto="1.Enfermedades infecciosas o crónicas\n2.Conductas de riesgo\n3.Factores de salud física\n4.Procedimientos médicos recientes\n5.Uso de medicamentos\n6.Estilo de vida o viajes recientes\n7.Embarazo, lactancia o menstruación"
+    Label(ventanaJustificaciones,text=texto,font=("Century Gothic",12),justify="left").pack(padx=20,pady=20)
+    Button(ventanaJustificaciones,text="Cerrar",font=("Century Gothic",12,"bold"),width=35,command=ventanaJustificaciones.destroy).pack(pady=10)
 
 def ventanaEliminarDonador(pDonadores):
     '''
@@ -200,7 +201,7 @@ def ventanaEliminarDonador(pDonadores):
     '''
     ventanaEliminar=Toplevel()
     ventanaEliminar.title("Eliminar donador")
-    ventanaEliminar.geometry("400x350")
+    ventanaEliminar.geometry("400x400")
     Label(ventanaEliminar,text="ELIMINAR DONADOR",font=("Century Gothic",14,"bold")).pack(pady=10)
     Label(ventanaEliminar,text="Digite la cédula").pack()
     entradaCedula=Entry(ventanaEliminar)
@@ -208,25 +209,10 @@ def ventanaEliminarDonador(pDonadores):
     Label(ventanaEliminar,text="Digite la justificación").pack()
     entradaJustificacion=Entry(ventanaEliminar)
     entradaJustificacion.pack(pady=5)
+    Button(ventanaEliminar,text="Eliminar",font=("Century Gothic",12,"bold"),width=35,command=lambda:confirmarEliminarDonadorTk(ventanaEliminar,pDonadores,entradaCedula,entradaJustificacion)).pack(pady=10)
+    Button(ventanaEliminar,text="Ver justificaciones",font=("Century Gothic",12,"bold"),width=35,command=mostrarJustificacionesTk).pack(pady=5)
+    Button(ventanaEliminar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=ventanaEliminar.destroy).pack(pady=5)
 
-    def confirmarEliminar():
-        """
-        Funcionamiento:confirma la eliminación del donador y muestra el resultado
-        -Entrada:
-            Se reciben los datos del donador a eliminar
-        -Salida:
-            Se muestra un mensaje con el resultado de la operación
-        """
-        respuesta=messagebox.askyesno("Confirmar eliminación","¿Desea confirmar la eliminación del donador?")
-        if respuesta==True:
-            mensaje=eliminarDonadorTk(pDonadores,entradaCedula.get(),entradaJustificacion.get())
-            messagebox.showinfo("Resultado",mensaje)
-            if mensaje=="Donador eliminado satisfactoriamente":
-                ventanaEliminar.destroy()
-        else:
-            messagebox.showinfo("Resultado","Donador NO eliminado")
-    Button(ventanaEliminar,text="Eliminar",command=confirmarEliminar).pack(pady=10)
-    Button(ventanaEliminar,text="Regresar",command=ventanaEliminar.destroy).pack(pady=5)
 #Funcion 5 del menu principal:
 def insertarLugarDonacion(pLugaresDonacion):
     '''
@@ -1078,3 +1064,79 @@ def abrirActualizarDonador(pVentana,pDonadores,pTiposSangre):
     cedula.pack(pady=5)
     Button(ventanaBuscar,text="Buscar",font=("Century Gothic",12,"bold"),width=35,command=lambda:buscarActualizarDonadorTk(pVentana,ventanaBuscar,pDonadores,cedula,pTiposSangre)).pack(pady=5)
     Button(ventanaBuscar,text="Regresar",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaBuscar)).pack(pady=5)
+
+def insertarLugarDonacionTk(pLugaresDonacion,pProvincia,pLugar):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el diccionario de lugares, la provincia y el lugar ingresado
+    -Salida:
+        Se agrega el lugar si cumple con las validaciones o se devuelve un mensaje de error
+    '''
+    validarProvincia=validarProvinciaAux(pProvincia)
+    if validarProvincia!=True:
+        return validarProvincia
+    lugar=pLugar.strip()
+    validarLugar=validarLugarDonacionAux(lugar)
+    if validarLugar!=True:
+        return validarLugar
+    validarRepetido=validarLugarRepetidoAux(pProvincia,lugar,pLugaresDonacion)
+    if validarRepetido!=True:
+        return validarRepetido
+    provincia=int(pProvincia)
+    if provincia not in pLugaresDonacion:
+        pLugaresDonacion[provincia]=[]
+    pLugaresDonacion[provincia].append(lugar)
+    guardarLugaresDonacionAux(pLugaresDonacion)
+    return "Lugar agregado correctamente"
+
+def confirmarInsertarLugarDonacionTk(pVentanaPrincipal,pVentanaLugar,pLugaresDonacion,pProvincia,pLugar):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana principal, la ventana de lugar, el diccionario de lugares, la provincia seleccionada y el lugar escrito
+    -Salida:
+        Se muestra el resultado y regresa al menú solo si se insertó correctamente
+    '''
+    provincia="0"
+    if pProvincia.get()=="San José":
+        provincia="1"
+    elif pProvincia.get()=="Alajuela":
+        provincia="2"
+    elif pProvincia.get()=="Cartago":
+        provincia="3"
+    elif pProvincia.get()=="Heredia":
+        provincia="4"
+    elif pProvincia.get()=="Guanacaste":
+        provincia="5"
+    elif pProvincia.get()=="Puntarenas":
+        provincia="6"
+    elif pProvincia.get()=="Limón":
+        provincia="7"
+    mensaje=insertarLugarDonacionTk(pLugaresDonacion,provincia,pLugar.get("1.0",END))
+    messagebox.showinfo("Resultado",mensaje)
+    if mensaje=="Lugar agregado correctamente":
+        regresarMenuPrincipal(pVentanaPrincipal,pVentanaLugar)
+
+def abrirInsertarLugarDonacion(pVentana,pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe la ventana principal y el diccionario de lugares de donación
+    -Salida:
+        Se muestra la ventana para insertar lugares de donación usando tkinter
+    '''
+    pVentana.withdraw()
+    ventanaLugar=Toplevel()
+    ventanaLugar.title("Insertar lugar de donación")
+    ventanaLugar.geometry("550x400")
+    Label(ventanaLugar,text="INSERTAR LUGAR DE DONACIÓN",font=("Century Gothic",14,"bold")).pack(pady=15)
+    Label(ventanaLugar,text="Provincia:",font=("Century Gothic",12)).pack()
+    provincia=StringVar()
+    provincia.set("San José")
+    OptionMenu(ventanaLugar,provincia,"San José","Alajuela","Cartago","Heredia","Guanacaste","Puntarenas","Limón").pack(pady=5)
+    Label(ventanaLugar,text="Nuevo lugar:",font=("Century Gothic",12)).pack()
+    lugar=Text(ventanaLugar,font=("Century Gothic",12),width=35,height=4)
+    lugar.pack(pady=5)
+    Button(ventanaLugar,text="Insertar",font=("Century Gothic",12,"bold"),width=35,command=lambda:confirmarInsertarLugarDonacionTk(pVentana,ventanaLugar,pLugaresDonacion,provincia,lugar)).pack(pady=5)
+    Button(ventanaLugar,text="Salir",font=("Century Gothic",12,"bold"),width=35,command=lambda:regresarMenuPrincipal(pVentana,ventanaLugar)).pack(pady=5)

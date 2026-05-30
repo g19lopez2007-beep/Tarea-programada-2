@@ -1,6 +1,6 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
-#Ultima fecha de modificacion: 27/5/26
+#Ultima fecha de modificacion: 29/5/26
 #Version de python:3.14
 
 import re
@@ -598,3 +598,31 @@ def validarBotonesMenuAux(pDonadores,pBoton3,pBoton4,pBoton6):
         pBoton3.config(state="normal")
         pBoton4.config(state="normal")
         pBoton6.config(state="normal")
+
+def cargarLugaresDonacionAux():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se carga el diccionario de lugares de donación desde memoria secundaria o se devuelve el diccionario inicial
+    '''
+    try:
+        archivo=open("lugaresDonacion.dat","rb")
+        lugares=pickle.load(archivo)
+        archivo.close()
+        return lugares
+    except:
+        return {1:["El Banco Nacional de Sangre","Hospital México","Hospital San Juan de Dios"],2:["Hospital San Rafael de Alajuela","Hospital de San Ramón","Hospital del Cantón Norteño"],3:["Hospital Max Peralta"],4:["Hospital San Vicente de Paúl"],5:["Hospital La Anexión en Nicoya","Hospital Enrique Baltodano de Liberia"],6:["Hospital Monseñor Sanabria"],7:["Hospital Tony Facio","Hospital de Guápiles"]}
+
+def guardarLugaresDonacionAux(pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el diccionario de lugares de donación
+    -Salida:
+        Se guarda el diccionario en memoria secundaria
+    '''
+    archivo=open("lugaresDonacion.dat","wb")
+    pickle.dump(pLugaresDonacion,archivo)
+    archivo.close()
