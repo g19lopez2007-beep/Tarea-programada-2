@@ -1,7 +1,7 @@
 #Creado por Gustavo López y Mel Acuña
 #Fecha de creacion: 14/5/26
 #Ultima fecha de modificacion: 30/5/26
-#Version de python:3.14
+#Version de python: 3.14
 
 import re
 import pickle
@@ -9,6 +9,7 @@ import time
 import names
 import random
 
+#Funcion Aux de la opcion 1,3 y 4 del menu
 def validarCedulaAux(pCedula):
     '''
     Funcionamiento:
@@ -21,6 +22,7 @@ def validarCedulaAux(pCedula):
         return "El formato de cédula esta malo"
     return True
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def validarFechaAux(pFecha):
     '''
     Funcionamiento:
@@ -53,6 +55,7 @@ def validarFechaAux(pFecha):
             return True
     return "Fecha invalida"
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def validarCorreoAux(pCorreo):
     '''
     Funcionamiento:
@@ -65,6 +68,7 @@ def validarCorreoAux(pCorreo):
         return "El correo no cumple con un dominio permitido"
     return True
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def validarTelefonoAux(pTelefono):
     '''
     Funcionamiento:
@@ -77,6 +81,7 @@ def validarTelefonoAux(pTelefono):
         return "El telefono debe cumplir el formato ####-#### y no puede iniciar en 0,1,3 o 5"
     return True
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def validarPesoAux(pPeso):
     '''
     Funcionamiento:
@@ -95,7 +100,7 @@ def validarPesoAux(pPeso):
         return "El peso no puede superar los 650kg"
     return True
 
-#Funcion Aux 1 del menu principal:
+#Funcion Aux de la opcion 1,2,3 y 4 del menu
 def guardarDonadoresAux(pDonadores):
     '''
     Funcionamiento:
@@ -108,6 +113,7 @@ def guardarDonadoresAux(pDonadores):
     pickle.dump(pDonadores,archivo)
     archivo.close()
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def validarPesoDonadorAux(pPeso):
     '''
     Funcionamiento:
@@ -121,6 +127,7 @@ def validarPesoDonadorAux(pPeso):
         return True
     return False
 
+#Funcion Aux de la opcion 1 y 3 del menu
 def obtenerJustificacionEstadoAux(pFechaNacimiento,pPeso):
     '''
     Funcionamiento:
@@ -139,7 +146,24 @@ def obtenerJustificacionEstadoAux(pFechaNacimiento,pPeso):
         return "Pesa más de 120kg"
     return True
 
-#Funcion Aux 2 del menu principal:
+#Funcion Aux de la opcion 1 y 3 del menu
+def validarTipoSangreAux(pTipoSangre,pTiposSangre):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el tipo de sangre ingresado y la tupla de tipos de sangre
+    -Salida:
+        Se devuelve True si el tipo de sangre es válido o un mensaje de error
+    '''
+    try:
+        pTipoSangre=int(pTipoSangre)
+    except:
+        return "El tipo de sangre debe ser un número"
+    if pTipoSangre<1 or pTipoSangre>len(pTiposSangre):
+        return "Tipo de sangre inválido"
+    return True
+
+#Funcion Aux de la opcion 2 del menu
 def validarCantidadAux(pCantidad):
     '''
     Funcionamiento:
@@ -156,6 +180,7 @@ def validarCantidadAux(pCantidad):
         return "La cantidad debe ser mayor a 0"
     return True
 
+#Funcion Aux de la opcion 2 del menu
 def generarCedulaAux():
     '''
     Funcionamiento:
@@ -169,6 +194,7 @@ def generarCedulaAux():
     asiento=random.randint(1000,9999)
     return str(provincia)+"-"+str(tomo)+"-"+str(asiento)
 
+#Funcion Aux de la opcion 2 del menu
 def generarNombreAux():
     '''
     Funcionamiento:
@@ -182,6 +208,7 @@ def generarNombreAux():
     apellido2=names.get_last_name()
     return [nombre,apellido1,apellido2]
 
+#Funcion Aux de la opcion 2 del menu
 def generarFechaNacimientoAux():
     '''
     Funcionamiento:
@@ -199,6 +226,7 @@ def generarFechaNacimientoAux():
         if calcularEdadAux(fecha)>=18:
             return fecha
 
+#Funcion Aux de la opcion 2 del menu
 def generarTelefonoAux():
     '''
     Funcionamiento:
@@ -212,6 +240,7 @@ def generarTelefonoAux():
     segundaParte=str(random.randint(1000,9999))
     return primerDigito+resto+"-"+segundaParte
 
+#Funcion Aux de la opcion 2 del menu
 def generarCorreoAux(pNombre,pApellido,pCorreos):
     '''
     Funcionamiento:
@@ -223,7 +252,7 @@ def generarCorreoAux(pNombre,pApellido,pCorreos):
     numero=random.randint(10,99)
     return pNombre.lower()+pApellido.lower()+str(numero)+"@"+random.choice(pCorreos)
 
-#Funcion Aux 3 del menu principal:
+#Funcion Aux de la opcion 3 y 4 del menu
 def buscarDonadorCedulaAux(pCedula,pDonadores):
     '''
     Funcionamiento:
@@ -238,7 +267,7 @@ def buscarDonadorCedulaAux(pCedula,pDonadores):
             return i
     return -1
 
-#Funcion Aux 3 del menu principal:
+#Funcion Aux de la opcion 3 del menu
 def actualizarDatosDonadorAux(pPosicion,pDonadores,pNombre,pTipoSangre,pSexo,pFechaNacimiento,pPeso,pCorreo,pTelefono,pEstado,pJustificacion):
     '''
     Funcionamiento:
@@ -257,7 +286,7 @@ def actualizarDatosDonadorAux(pPosicion,pDonadores,pNombre,pTipoSangre,pSexo,pFe
     pDonadores[pPosicion][8]=pEstado
     pDonadores[pPosicion][9]=pJustificacion
 
-#Funcion Aux 4 del menu principal:
+#Funcion Aux de la opcion 4 del menu
 def inactivarDonadorAux(pPosicion,pDonadores,pJustificacion):
     '''
     Funcionamiento:
@@ -271,8 +300,8 @@ def inactivarDonadorAux(pPosicion,pDonadores,pJustificacion):
     pDonadores[pPosicion][8]=0
     pDonadores[pPosicion][9]=pJustificacion
     guardarDonadoresAux(pDonadores)
-    
-#Funcion Aux 5 del menu principal:
+
+#Funcion Aux de la opcion 5 del menu
 def validarProvinciaAux(pProvincia):
     '''
     Funcionamiento:
@@ -289,7 +318,7 @@ def validarProvinciaAux(pProvincia):
         return "Provincia inválida"
     return True
 
-#Funcion Aux 5 del menu principal:
+#Funcion Aux de la opcion 5 del menu
 def validarLugarDonacionAux(pLugar):
     '''
     Funcionamiento:
@@ -302,7 +331,7 @@ def validarLugarDonacionAux(pLugar):
         return "El lugar no puede estar vacío"
     return True
 
-#Funcion Aux 5 del menu principal:
+#Funcion Aux de la opcion 5 del menu
 def validarLugarRepetidoAux(pProvincia,pLugar,pLugaresDonacion):
     '''
     Funcionamiento:
@@ -319,7 +348,37 @@ def validarLugarRepetidoAux(pProvincia,pLugar,pLugaresDonacion):
             return "Ese lugar ya está registrado en esa provincia"
     return True
 
-#Funcion Aux 3 del submenu:
+#Funcion Aux de la opcion 5 del menu y opcion 9 del submenu reportes
+def cargarLugaresDonacionAux():
+    '''
+    Funcionamiento:
+    -Entrada:
+        No recibe datos
+    -Salida:
+        Se carga el diccionario de lugares de donación desde memoria secundaria o se devuelve el diccionario inicial
+    '''
+    try:
+        archivo=open("lugaresDonacion.dat","rb")
+        lugares=pickle.load(archivo)
+        archivo.close()
+        return lugares
+    except:
+        return {1:["El Banco Nacional de Sangre","Hospital México","Hospital San Juan de Dios"],2:["Hospital San Rafael de Alajuela","Hospital de San Ramón","Hospital del Cantón Norteño"],3:["Hospital Max Peralta"],4:["Hospital San Vicente de Paúl"],5:["Hospital La Anexión en Nicoya","Hospital Enrique Baltodano de Liberia"],6:["Hospital Monseñor Sanabria"],7:["Hospital Tony Facio","Hospital de Guápiles"]}
+
+#Funcion Aux de la opcion 5 del menu
+def guardarLugaresDonacionAux(pLugaresDonacion):
+    '''
+    Funcionamiento:
+    -Entrada:
+        Se recibe el diccionario de lugares de donación
+    -Salida:
+        Se guarda el diccionario en memoria secundaria
+    '''
+    archivo=open("lugaresDonacion.dat","wb")
+    pickle.dump(pLugaresDonacion,archivo)
+    archivo.close()
+
+#Funcion Aux de las opciones 1,2,3,4,5,6,7 y 8 del submenu reportes
 def obtenerNombreCompletoAux(pNombre):
     '''
     Funcionamiento:
@@ -330,22 +389,7 @@ def obtenerNombreCompletoAux(pNombre):
     '''
     return pNombre[0]+" "+pNombre[1]+" "+pNombre[2]
 
-def validarTipoSangreAux(pTipoSangre,pTiposSangre):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el tipo de sangre ingresado y la tupla de tipos de sangre
-    -Salida:
-        Se devuelve True si el tipo de sangre es válido o un mensaje de error
-    '''
-    try:
-        pTipoSangre=int(pTipoSangre)
-    except:
-        return "El tipo de sangre debe ser un número"
-    if pTipoSangre<1 or pTipoSangre>len(pTiposSangre):
-        return "Tipo de sangre inválido"
-    return True
-
+#Funcion Aux de la opcion 3 del menu y opciones 1,2,3,4,5 y 8 del submenu reportes
 def obtenerFechaTextoAux(pFecha):
     '''
     Funcionamiento:
@@ -359,6 +403,7 @@ def obtenerFechaTextoAux(pFecha):
     anno=str(pFecha[2])
     return dia+"/"+mes+"/"+anno
 
+#Funcion Aux de las opciones 1,2,3,4,5,6,7,8 y 9 del submenu reportes
 def iniciarHtmlAux(pArchivo,pTitulo):
     '''
     Funcionamiento:
@@ -372,6 +417,7 @@ def iniciarHtmlAux(pArchivo,pTitulo):
     pArchivo.write("<h1>"+pTitulo+"</h1>\n")
     pArchivo.write("<p>Fecha y hora del sistema: "+fechaHora+"</p>\n")
 
+#Funcion Aux de las opciones 1,2,3,4,5,6,7,8 y 9 del submenu reportes
 def finalizarHtmlAux(pArchivo):
     '''
     Funcionamiento:
@@ -382,7 +428,7 @@ def finalizarHtmlAux(pArchivo):
     '''
     pArchivo.write("</body>\n</html>")
 
-#Funcion Aux reporte rango edad:
+#Funcion Aux de la opcion 2 del menu y opciones 2 y 5 del submenu reportes
 def calcularEdadAux(pFechaNacimiento):
     '''
     Funcionamiento:
@@ -407,7 +453,7 @@ def calcularEdadAux(pFechaNacimiento):
             edad=edad-1
     return edad
 
-#Funcion Aux reporte puede donar:
+#Funcion Aux de las opciones 6,7 y 8 del submenu reportes
 def obtenerTipoSangreTextoAux(pTipo,pTiposSangre):
     '''
     Funcionamiento:
@@ -418,8 +464,7 @@ def obtenerTipoSangreTextoAux(pTipo,pTiposSangre):
     '''
     return pTiposSangre[pTipo]
 
-#Funcion Aux reporte puede donar:
-
+#Funcion Aux de la opcion 6 del submenu reportes
 def puedeDonarAux(pTipoDonante,pTipoReceptor):
     '''
     Funcionamiento:
@@ -453,7 +498,7 @@ def puedeDonarAux(pTipoDonante,pTipoReceptor):
             return True
     return False
 
-#Funcion Aux reporte puede recibir:
+#Funcion Aux de la opcion 7 del submenu reportes
 def puedeRecibirAux(pTipoReceptor,pTipoDonante):
     '''
     Funcionamiento:
@@ -487,7 +532,7 @@ def puedeRecibirAux(pTipoReceptor,pTipoDonante):
         return True
     return False
 
-#Funcion Aux reporte donantes no activos:
+#Funcion Aux de la opcion 4 del menu y opcion 8 del submenu reportes
 def obtenerJustificacionAux(pJustificacion):
     '''
     Funcionamiento:
@@ -514,8 +559,8 @@ def obtenerJustificacionAux(pJustificacion):
         return "Embarazo, lactancia o menstruación"
     else:
         return "Justificación no registrada"
-    
-#Funcion Aux reporte lugares de donacion:
+
+#Funcion Aux de la opcion 9 del submenu reportes
 def obtenerProvinciaTextoAux(pProvincia):
     '''
     Funcionamiento:
@@ -540,7 +585,8 @@ def obtenerProvinciaTextoAux(pProvincia):
         return "Limón"
     else:
         return "Provincia no registrada"
-    
+
+#Funcion Aux de la opcion 4 y 8 del submenu reportes
 def obtenerSexoTextoAux(pSexo):
     '''
     Funcionamiento:
@@ -553,6 +599,7 @@ def obtenerSexoTextoAux(pSexo):
         return "Masculino"
     return "Femenino"
 
+#Funcion Aux de la opcion 1,2,3,4 y 6 del menu
 def validarBotonesMenuAux(pDonadores,pBoton3,pBoton4,pBoton6):
     '''
     Funcionamiento:
@@ -569,31 +616,3 @@ def validarBotonesMenuAux(pDonadores,pBoton3,pBoton4,pBoton6):
         pBoton3.config(state="normal")
         pBoton4.config(state="normal")
         pBoton6.config(state="normal")
-
-def cargarLugaresDonacionAux():
-    '''
-    Funcionamiento:
-    -Entrada:
-        No recibe datos
-    -Salida:
-        Se carga el diccionario de lugares de donación desde memoria secundaria o se devuelve el diccionario inicial
-    '''
-    try:
-        archivo=open("lugaresDonacion.dat","rb")
-        lugares=pickle.load(archivo)
-        archivo.close()
-        return lugares
-    except:
-        return {1:["El Banco Nacional de Sangre","Hospital México","Hospital San Juan de Dios"],2:["Hospital San Rafael de Alajuela","Hospital de San Ramón","Hospital del Cantón Norteño"],3:["Hospital Max Peralta"],4:["Hospital San Vicente de Paúl"],5:["Hospital La Anexión en Nicoya","Hospital Enrique Baltodano de Liberia"],6:["Hospital Monseñor Sanabria"],7:["Hospital Tony Facio","Hospital de Guápiles"]}
-
-def guardarLugaresDonacionAux(pLugaresDonacion):
-    '''
-    Funcionamiento:
-    -Entrada:
-        Se recibe el diccionario de lugares de donación
-    -Salida:
-        Se guarda el diccionario en memoria secundaria
-    '''
-    archivo=open("lugaresDonacion.dat","wb")
-    pickle.dump(pLugaresDonacion,archivo)
-    archivo.close()
